@@ -1,12 +1,31 @@
 ﻿<Window x:Class="ProjectPRN_SE1886.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjectPRN_SE1886"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Quản lý Hộ khẩu" Height="450" Width="800">
     <Grid>
+        <!-- Tìm kiếm -->
+        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Margin="10" 
+                  />
+        <Button Content="Tìm kiếm" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="320,10,0,0" Width="100" 
+                Click="SearchButton_Click"/>
 
+        <!-- Lọc theo loại đăng ký -->
+        <ComboBox x:Name="RegistrationFilterComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="10,40,0,0"/>
+
+        <!-- DataGrid để hiển thị thông tin -->
+        <DataGrid x:Name="DataGridResidents" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,80,10,0" Height="300" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Id" Binding="{Binding HouseholdId}"/>
+                <DataGridTextColumn Width="*" Header="Houlehold" Binding="{Binding HeadOfHousehold.FullName}"/>
+                <DataGridTextColumn Width="*" Header="Address" Binding="{Binding Address}"/>
+                <DataGridTextColumn Width="*" Header="Created Day" Binding="{Binding CreatedDate}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Các nút chức năng -->
+        <Button Content="Thêm" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="10,0,0,10" Click="AddButton_Click"/>
+        <Button Content="Sửa" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="120,0,0,10" Click="EditButton_Click"/>
+        <Button Content="Xóa" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="230,0,0,10" Click="DeleteButton_Click"/>
+        <Button Content="Sắp xếp" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="340,0,0,10" Click="SortButton_Click"/>
     </Grid>
 </Window>
