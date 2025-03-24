@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ProjectPRN_SE1886.Models;
+using ProjectPRN_SE1886.viewModel;
 
 namespace ProjectPRN_SE1886
 {
@@ -19,42 +20,33 @@ namespace ProjectPRN_SE1886
     public partial class MainWindow : Window
     {
 
+        private readonly DAO.UserDAO _userDAO;
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
-            LoadHouseholds();
+            _userDAO = new DAO.UserDAO();
         }
 
-        private void LoadHouseholds()
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var households = householdDAO.GetHouseholds();
-            DataGridResidents.ItemsSource = households;
-        }
+            string email = EmailTextBox.Text;
+            string password = PasswordBox.Password;
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement search logic here
-        }
+            User user = _userDAO.Login(email, password);
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement add logic here
-        }
-
-        private void EditButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement edit logic here
-        }
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement delete logic here
-        }
-
-        private void SortButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Implement sort logic here
+            if (user != null)
+            {
+                // Role được lấy từ database, không cần chọn từ ComboBox
+                DashboardWindow dashboard = new DashboardWindow(user.Role);
+                dashboard.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid email or password");
+            }
         }
     }
+
 }

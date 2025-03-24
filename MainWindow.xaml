@@ -1,31 +1,29 @@
 ﻿<Window x:Class="ProjectPRN_SE1886.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Quản lý Hộ khẩu" Height="450" Width="800">
-    <Grid>
-        <!-- Tìm kiếm -->
-        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" Margin="10" 
-                  />
-        <Button Content="Tìm kiếm" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="320,10,0,0" Width="100" 
-                Click="SearchButton_Click"/>
+        Title="Login" Height="400" Width="500"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <!-- Lọc theo loại đăng ký -->
-        <ComboBox x:Name="RegistrationFilterComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="10,40,0,0"/>
+        <TextBlock Grid.Row="0" Text="Household Management System" 
+                  FontSize="24" FontWeight="Bold" 
+                  HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-        <!-- DataGrid để hiển thị thông tin -->
-        <DataGrid x:Name="DataGridResidents" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,80,10,0" Height="300" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Header="Id" Binding="{Binding HouseholdId}"/>
-                <DataGridTextColumn Width="*" Header="Houlehold" Binding="{Binding HeadOfHousehold.FullName}"/>
-                <DataGridTextColumn Width="*" Header="Address" Binding="{Binding Address}"/>
-                <DataGridTextColumn Width="*" Header="Created Day" Binding="{Binding CreatedDate}"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Email" Margin="0,0,0,5"/>
+            <TextBox x:Name="EmailTextBox" Margin="0,0,0,15"/>
 
-        <!-- Các nút chức năng -->
-        <Button Content="Thêm" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="10,0,0,10" Click="AddButton_Click"/>
-        <Button Content="Sửa" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="120,0,0,10" Click="EditButton_Click"/>
-        <Button Content="Xóa" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="230,0,0,10" Click="DeleteButton_Click"/>
-        <Button Content="Sắp xếp" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Margin="340,0,0,10" Click="SortButton_Click"/>
+            <TextBlock Text="Password" Margin="0,0,0,5"/>
+            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,15"/>
+        </StackPanel>
+
+        <Button Grid.Row="2" Content="Login" Width="100" 
+                HorizontalAlignment="Center" Margin="0,0,0,20"
+                Click="LoginButton_Click"/>
     </Grid>
 </Window>

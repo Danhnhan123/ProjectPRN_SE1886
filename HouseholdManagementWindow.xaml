@@ -1,0 +1,79 @@
+﻿<Window x:Class="ProjectPRN_SE1886.HouseholdManagementWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Household Management" Height="650" Width="1160">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Household Management" FontSize="20" FontWeight="Bold"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Input Panel -->
+            <Border Background="#F5F6F5" Padding="15" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="Household Information" 
+                          FontSize="16" Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Household ID" Margin="0,0,0,5"/>
+                    <TextBox x:Name="HouseholdIdTextBox" IsReadOnly="True" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Head of Household" Margin="0,0,0,5"/>
+                    <ComboBox x:Name="HeadOfHouseholdComboBox" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Address" Margin="0,0,0,5"/>
+                    <TextBox x:Name="AddressTextBox" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Created Date" Margin="0,0,0,5"/>
+                    <DatePicker x:Name="CreatedDatePicker" Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="AddButton" Content="Add" Width="80" 
+                            Margin="0,0,10,0" Click="AddButton_Click"/>
+                        <Button x:Name="EditButton" Content="Edit" Width="80" 
+                            Margin="0,0,10,0" Click="EditButton_Click"/>
+                        <Button x:Name="DeleteButton" Content="Delete" Width="80" 
+                            Click="DeleteButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Data Display -->
+            <StackPanel Grid.Column="1">
+                <GroupBox Header="Search" Margin="0,0,0,10">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Label Content="Head of household:"/>
+                            <ComboBox x:Name="HeadOfHouseholdSearchComboBox" 
+                             Width="150" Margin="0,0,10,0" SelectionChanged="head_selection"/>
+                        <Label Content="Address:"/>
+                            <TextBox x:Name="AddressSearchTextBox" 
+                            Width="150" Margin="0,0,10,0" KeyDown="address_keydown"/>
+                        <Label Content="Create date:"/>
+                        <DatePicker x:Name="DateSearchPicker" 
+                               Width="150" Margin="0,0,10,0" SelectedDateChanged="create_change"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <DataGrid x:Name="HouseholdsDataGrid" AutoGenerateColumns="False" 
+                     IsReadOnly="True" SelectionChanged="HouseholdsDataGrid_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding HouseholdId}" Width="100"/>
+                        <DataGridTextColumn Header="Head" Binding="{Binding HeadOfHousehold.FullName}" Width="*"/>
+                        <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                        <DataGridTextColumn Header="Created" Binding="{Binding CreatedDate, StringFormat=d}" Width="110"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
