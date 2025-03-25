@@ -21,12 +21,15 @@ namespace ProjectPRN_SE1886
     public partial class DashboardWindow : Window
     {
         private string _userRole;
+        private User _user;
 
-        public DashboardWindow(string userRole)
+
+        public DashboardWindow(User user)
         {
             InitializeComponent();
-            _userRole = userRole;
+            _userRole = user.Role;
             ConfigureRoleAccess();
+            _user = user;
         }
 
         private void ConfigureRoleAccess()
@@ -38,6 +41,7 @@ namespace ProjectPRN_SE1886
                     HouseholdsButton.IsEnabled = false;
                     MembersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
+                    RegistrationsManageButton.IsEnabled = false;
                     break;
                 case "AreaLeader":
                     UsersButton.IsEnabled = false;
@@ -73,7 +77,8 @@ namespace ProjectPRN_SE1886
 
         private void RegistrationsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RegistrationsWindow wndow = new RegistrationsWindow(_user);
+            wndow.Show();
         }
 
         private void MembersButton_Click(object sender, RoutedEventArgs e)
@@ -89,6 +94,12 @@ namespace ProjectPRN_SE1886
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RegistrationsManageButton_Click(object sender, RoutedEventArgs e)
+        {
+            RegistrationsManageWindow window = new RegistrationsManageWindow(_user);
+            window.Show();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace ProjectPRN_SE1886
             if (user != null)
             {
                 // Role được lấy từ database, không cần chọn từ ComboBox
-                DashboardWindow dashboard = new DashboardWindow(user.Role);
+                DashboardWindow dashboard = new DashboardWindow(user);
                 dashboard.Show();
                 this.Close();
             }
