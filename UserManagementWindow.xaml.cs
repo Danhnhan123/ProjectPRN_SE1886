@@ -86,25 +86,31 @@ namespace ProjectPRN_SE1886
             if (AddressSearchTextBox != null && !AddressSearchTextBox.Text.IsNullOrEmpty())
             {
                 string address = AddressSearchTextBox.Text;
-                users = UserDAO.GetUserByAddress(address, users);
+                users = UserDAO.GetUserByEmail(address, users);
                 UserDataGrid.ItemsSource = users;
             }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            User household = new User
+            if (!FullnameSearchTextBox.Text.IsNullOrEmpty() && !EmailTextBox.Text.IsNullOrEmpty() && !PasswordTextBox.Text.IsNullOrEmpty() && !cbRole.SelectedItem.ToString().IsNullOrEmpty()) {
+                User household = new User
+                {
+                    FullName = FullnameTextBox.Text,
+                    Email = EmailTextBox.Text,
+                    Password = PasswordTextBox.Text,
+                    Role = cbRole.SelectedItem.ToString(),
+                };
+                UserDAO.AddUser(household);
+                MessageBox.Show("User added successfully!");
+                LoadInitialData2();
+                ClearInputs();
+            }
+            else
             {
-                FullName = FullnameTextBox.Text,
-                Email = EmailTextBox.Text,
-                Address = AddressTextBox.Text,
-                Password = PasswordTextBox.Text,
-                Role = cbRole.SelectedItem.ToString(),
-            };
-            UserDAO.AddUser(household);
-            MessageBox.Show("User added successfully!");
-            LoadInitialData2();
-            ClearInputs();
+                MessageBox.Show("Please fill in all fields!");
+            }
+
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -112,7 +118,6 @@ namespace ProjectPRN_SE1886
             if (UserDataGrid.SelectedItem is User selectedHousehold)
             {
                 selectedHousehold.FullName = FullnameTextBox.Text;
-                selectedHousehold.Address = AddressTextBox.Text;
                 selectedHousehold.Email = EmailTextBox.Text;
                 selectedHousehold.Password = PasswordTextBox.Text;
                 selectedHousehold.Role = cbRole.SelectedItem.ToString();
@@ -153,7 +158,6 @@ namespace ProjectPRN_SE1886
             {
                 UserIdTextBox.Text = selectedUser.UserId.ToString();
                 FullnameTextBox.Text = selectedUser.FullName;
-                AddressTextBox.Text = selectedUser.Address;
                 EmailTextBox.Text = selectedUser.Email;
                 cbRole.SelectedItem = selectedUser.Role;
                 PasswordTextBox.Text = selectedUser.Password;
@@ -174,7 +178,6 @@ namespace ProjectPRN_SE1886
         {
             UserIdTextBox.Text = "";
             cbRole.SelectedIndex = -1;
-            AddressTextBox.Text = "";
             FullnameTextBox.Text = "";
             EmailTextBox.Text = "";
             PasswordTextBox.Text = "";

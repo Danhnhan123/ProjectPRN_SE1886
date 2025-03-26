@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.IdentityModel.Tokens;
 using ProjectPRN_SE1886.Models;
 using static ProjectPRN_SE1886.DAO;
 
@@ -42,6 +43,8 @@ namespace ProjectPRN_SE1886
                     DeleteButton.IsEnabled = false;
                     break;
                 case "Area Leader":
+                    AddButton.IsEnabled = false;
+                    EditButton.IsEnabled = false;
                     DeleteButton.IsEnabled = false;
                     break;
                     // Police và Admin có toàn quyền
@@ -64,17 +67,25 @@ namespace ProjectPRN_SE1886
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            Household household = new Household
+            if (HeadOfHouseholdComboBox.SelectedValue.ToString().IsNullOrEmpty() || AddressTextBox.Text.IsNullOrEmpty() || CreatedDatePicker.SelectedDate.ToString().IsNullOrEmpty())
             {
-                HeadOfHouseholdId = (int?)HeadOfHouseholdComboBox.SelectedValue,
-                Address = AddressTextBox.Text,
-                CreatedDate = CreatedDatePicker.SelectedDate.HasValue
-                    ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
-                    : DateOnly.FromDateTime(DateTime.Now)
-            };
-            _householdDAO.AddHousehold(household);
-            LoadHouseholds();
-            ClearInputs();
+                MessageBox.Show("Please fill in all fields!");
+            }
+            else
+            {
+                Household household = new Household
+                {
+                    HeadOfHouseholdId = (int?)HeadOfHouseholdComboBox.SelectedValue,
+                    Address = AddressTextBox.Text,
+                    CreatedDate = CreatedDatePicker.SelectedDate.HasValue
+                   ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
+                   : DateOnly.FromDateTime(DateTime.Now)
+                };
+                _householdDAO.AddHousehold(household);
+                MessageBox.Show("Household added successfully!");
+                LoadHouseholds();
+                ClearInputs();
+            }
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -90,6 +101,10 @@ namespace ProjectPRN_SE1886
                 LoadHouseholds();
                 ClearInputs();
             }
+            else
+            {
+                MessageBox.Show("Please select a household to edit!");
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -99,6 +114,10 @@ namespace ProjectPRN_SE1886
                 _householdDAO.DeleteHousehold(selectedHousehold.HouseholdId);
                 LoadHouseholds();
                 ClearInputs();
+            }
+            else
+            {
+                MessageBox.Show("Please select a household to delete!");
             }
         }
 

@@ -21,12 +21,14 @@ namespace ProjectPRN_SE1886
     public partial class DashboardWindow : Window
     {
         private string _userRole;
+        private User _currentUser;
 
-        public DashboardWindow(string userRole)
+        public DashboardWindow(User user)
         {
             InitializeComponent();
-            _userRole = userRole;
+            _userRole = user.Role;
             ConfigureRoleAccess();
+            _currentUser = user;
         }
 
         private void ConfigureRoleAccess()
@@ -42,11 +44,19 @@ namespace ProjectPRN_SE1886
                 case "AreaLeader":
                     UsersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
+                    ProfileButton.Visibility = Visibility.Hidden;
                     break;
                 case "Police":
                     UsersButton.IsEnabled = false;
+                    ProfileButton.Visibility = Visibility.Hidden;
                     break;
                 case "Administrator":
+                    HouseholdsButton.IsEnabled = false;
+                    MembersButton.IsEnabled = false;
+                    LogsButton.IsEnabled = false;
+                    NotificationsButton.IsEnabled = false;
+                    RegistrationsButton.IsEnabled = false;
+                    ProfileButton.Visibility = Visibility.Hidden;
                     // All buttons enabled
                     break;
             }
@@ -89,6 +99,12 @@ namespace ProjectPRN_SE1886
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserProfileWindow window = new UserProfileWindow(_currentUser);
+            window.Show();
         }
     }
 }

@@ -42,9 +42,6 @@
                         
                     </ComboBox>
 
-                    <TextBlock Text="Address" Margin="0,0,0,5"/>
-                    <TextBox x:Name="AddressTextBox" Margin="0,0,0,10"/>
-
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="AddButton" Content="Add" Width="80" 
                             Margin="0,0,10,0" Click="AddButton_Click"/>
@@ -68,7 +65,7 @@
                         <Label Content="Fullname:"/>
                         <TextBox x:Name="FullnameSearchTextBox" 
                              Width="150" Margin="0,0,10,0" KeyDown="txtname_keydown"/>
-                        <Label Content="Address:"/>
+                        <Label Content="Email:"/>
                         <TextBox x:Name="AddressSearchTextBox" 
                             Width="150" Margin="0,0,10,0" KeyDown="txtAddress_keydown"/>
                     </StackPanel>
@@ -81,7 +78,6 @@
                         <DataGridTextColumn Header="Fullname" Binding="{Binding FullName}" Width="*"/>
                         <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
                         <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="*"/>
-                        <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
