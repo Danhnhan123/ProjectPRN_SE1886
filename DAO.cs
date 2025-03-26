@@ -114,40 +114,78 @@ namespace ProjectPRN_SE1886
         // HouseholdDAO.cs
         public class HouseholdDAO
         {
-            private readonly PrnProjectContext _context;
 
-            public HouseholdDAO()
+            
+            public static List<Household> GetAllHouseholds()
             {
-                _context = new PrnProjectContext();
-            }
-
-            public List<Household> GetAllHouseholds()
-            {
+                PrnProjectContext _context = new PrnProjectContext();
                 return _context.Households.Include(x => x.HeadOfHousehold)  // Thêm Include này
                              .Include(x => x.HouseholdMembers)
                              .ToList();
             }
 
-            public void AddHousehold(Household household)
+            public static void AddHousehold(Household household)
             {
+                PrnProjectContext _context = new PrnProjectContext();
                 _context.Households.Add(household);
                 _context.SaveChanges();
             }
 
-            public void UpdateHousehold(Household household)
+            public static void UpdateHousehold(Household household)
             {
+                PrnProjectContext _context = new PrnProjectContext();
                 _context.Households.Update(household);
                 _context.SaveChanges();
             }
 
             public void DeleteHousehold(int householdId)
             {
+                PrnProjectContext _context = new PrnProjectContext();
                 var household = _context.Households.Find(householdId);
                 if (household != null)
                 {
                     _context.Households.Remove(household);
                     _context.SaveChanges();
                 }
+            }
+
+            public static List<Household> GetHouseholdByName(int ename, List<Household> u)
+            {
+                List<Household> users = new List<Household>();
+                foreach (var item in u)
+                {
+                    if (item.HeadOfHouseholdId==ename)
+                    {
+                        users.Add(item);
+                    }
+                }
+                return users;
+            }
+
+            public static List<Household> GetUserByAddress(string address, List<Household> u)
+            {
+                List<Household> users = new List<Household>();
+                foreach (var item in u)
+                {
+                    if (item.Address.Contains(address))
+                    {
+                        users.Add(item);
+                    }
+                }
+                return users;
+            }
+
+            public static List<Household> GetUserByDate(DateOnly d, List<Household> u)
+            {
+                List<Household> users = new List<Household>();
+                foreach (var item in u)
+                {
+                    if (item.CreatedDate.Equals(d))
+                    {
+                        users.Add(item);
+                    }
+                }
+                return users;
             }
         }
     }

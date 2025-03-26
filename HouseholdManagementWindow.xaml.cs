@@ -31,6 +31,7 @@ namespace ProjectPRN_SE1886
             _userRole = userRole;
             LoadHouseholds();
             ConfigureRoleAccess();
+
             LoadHeadOfHouseholdComboBox();
         }
         private void ConfigureRoleAccess()
@@ -53,10 +54,20 @@ namespace ProjectPRN_SE1886
 
         private void LoadHouseholds()
         {
-            HouseholdsDataGrid.ItemsSource = _householdDAO.GetAllHouseholds();
+            HouseholdsDataGrid.ItemsSource = HouseholdDAO.GetAllHouseholds();
         }
         private void LoadHeadOfHouseholdComboBox()
         {
+            var users = UserDAO.GetAllUsers();
+
+            // Tạo danh sách mới để thêm "All"
+            var userList = new List<User>();
+
+            // Thêm lựa chọn "All" với UserId = -1
+            userList.Add(new User { UserId = -1, FullName = "All" });
+
+            // Thêm toàn bộ người dùng còn lại
+            userList.AddRange(users);
             HeadOfHouseholdComboBox.ItemsSource = UserDAO.GetAllUsers();
             HeadOfHouseholdComboBox.DisplayMemberPath = "FullName";
             HeadOfHouseholdComboBox.SelectedValuePath = "UserId";
@@ -81,11 +92,50 @@ namespace ProjectPRN_SE1886
                    ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                    : DateOnly.FromDateTime(DateTime.Now)
                 };
-                _householdDAO.AddHousehold(household);
+                HouseholdDAO.AddHousehold(household);
                 MessageBox.Show("Household added successfully!");
                 LoadHouseholds();
                 ClearInputs();
             }
+        }
+
+        public void LoadInitialData2()
+        {
+            var household = HouseholdDAO.GetAllHouseholds();
+            if (HeadOfHouseholdSearchComboBox.SelectedItem != null)
+            {
+                if (HeadOfHouseholdSearchComboBox.SelectedValue != null)
+                {
+                    int selectedUserId = (int)HeadOfHouseholdSearchComboBox.SelectedValue;
+                    if (selectedUserId>0)
+                    {
+                        household = HouseholdDAO.GetHouseholdByName(selectedUserId, household);
+                    }
+                    else
+                    {
+                        household = HouseholdDAO.GetAllHouseholds();
+                    }
+                }
+            }
+
+            // Tìm kiếm theo ngày từ DatePicker
+            if (DateSearchPicker.SelectedDate.HasValue)
+            {
+                DateOnly selectedDate = DateOnly.FromDateTime(DateSearchPicker.SelectedDate.Value);
+                household = HouseholdDAO.GetUserByDate(selectedDate, household);
+            }
+
+            if (DateSearchPicker != null && !DateSearchPicker.Text.IsNullOrEmpty())
+            {
+                DateOnly address = DateOnly.Parse(DateSearchPicker.Text);
+                household = HouseholdDAO.GetUserByDate(address, household);
+            }
+            if (AddressSearchTextBox != null && !AddressSearchTextBox.Text.IsNullOrEmpty())
+            {
+                string address = AddressSearchTextBox.Text;
+                household = HouseholdDAO.GetUserByAddress(address, household);
+            }
+            HouseholdsDataGrid.ItemsSource = household;
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -97,7 +147,7 @@ namespace ProjectPRN_SE1886
                 selectedHousehold.CreatedDate = CreatedDatePicker.SelectedDate.HasValue
                     ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                     : DateOnly.FromDateTime(DateTime.Now);
-                _householdDAO.UpdateHousehold(selectedHousehold);
+                HouseholdDAO.UpdateHousehold(selectedHousehold);
                 LoadHouseholds();
                 ClearInputs();
             }
@@ -138,17 +188,17 @@ namespace ProjectPRN_SE1886
 
         private void head_selection(object sender, SelectionChangedEventArgs e)
         {
-
+            LoadInitialData2();
         }
 
         private void create_change(object sender, SelectionChangedEventArgs e)
         {
-
+            LoadInitialData2();
         }
 
         private void address_keydown(object sender, KeyEventArgs e)
         {
-
+            LoadInitialData2();
         }
 
         private void ClearInputs()

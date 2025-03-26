@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.IdentityModel.Tokens;
 using ProjectPRN_SE1886.Models;
 using static ProjectPRN_SE1886.DAO;
 
@@ -54,7 +55,7 @@ namespace ProjectPRN_SE1886
 
         private void LoadHouseholds()
         {
-            HouseholdsDataGrid.ItemsSource = _householdDAO.GetAllHouseholds();
+            HouseholdsDataGrid.ItemsSource = HouseholdDAO.GetAllHouseholds();
         }
         private void LoadHeadOfHouseholdComboBox()
         {
@@ -76,7 +77,7 @@ namespace ProjectPRN_SE1886
                     ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                     : DateOnly.FromDateTime(DateTime.Now)
             };
-            _householdDAO.AddHousehold(household);
+            HouseholdDAO.AddHousehold(household);
             LoadHouseholds();
             ClearInputs();
         }
@@ -90,7 +91,7 @@ namespace ProjectPRN_SE1886
                 selectedHousehold.CreatedDate = CreatedDatePicker.SelectedDate.HasValue
                     ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                     : DateOnly.FromDateTime(DateTime.Now);
-                _householdDAO.UpdateHousehold(selectedHousehold);
+                HouseholdDAO.UpdateHousehold(selectedHousehold);
                 LoadHouseholds();
                 ClearInputs();
             }
@@ -129,11 +130,13 @@ namespace ProjectPRN_SE1886
             DateSearchPicker.SelectedDate = null;
         }
 
+        
+
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             // Implement search logic here using DAO
             // Ví dụ:
-            var households = _householdDAO.GetAllHouseholds();
+            var households = HouseholdDAO.GetAllHouseholds();
             if (HeadOfHouseholdSearchComboBox.SelectedValue != null)
             {
                 households = households.Where(h => h.HeadOfHouseholdId == (int?)HeadOfHouseholdSearchComboBox.SelectedValue).ToList();
