@@ -40,6 +40,7 @@ namespace ProjectPRN_SE1886
                     HouseholdsButton.IsEnabled = false;
                     MembersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
+                    RegistrationsManageButton.IsEnabled = false;
                     break;
                 case "AreaLeader":
                     UsersButton.IsEnabled = false;
@@ -83,12 +84,12 @@ namespace ProjectPRN_SE1886
 
         private void RegistrationsManageButton_Click(object sender, RoutedEventArgs e)
         {
-            RegistrationsManageWindow window = new RegistrationsManageWindow(_user);
+            RegistrationsManageWindow window = new RegistrationsManageWindow(_currentUser);
             window.Show();
         }
         private void RegistrationsButton_Click(object sender, RoutedEventArgs e)
         {
-            RegistrationsWindow wndow = new RegistrationsWindow(_user);
+            RegistrationsWindow wndow = new RegistrationsWindow(_currentUser);
             wndow.Show();
         }
 
