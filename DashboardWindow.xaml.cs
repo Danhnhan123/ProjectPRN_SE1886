@@ -20,14 +20,18 @@ namespace ProjectPRN_SE1886
     /// </summary>
     public partial class DashboardWindow : Window
     {
+        
         private string _userRole;
+        private User _currentUser;
 
-        public DashboardWindow(string userRole)
+        public DashboardWindow(User user)
         {
             InitializeComponent();
-            _userRole = userRole;
+            _userRole = user.Role;
             ConfigureRoleAccess();
+            _currentUser = user;
         }
+
 
         private void ConfigureRoleAccess()
         {
@@ -65,11 +69,17 @@ namespace ProjectPRN_SE1886
             this.Close();
         }
 
+        //private void UsersButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    UserManagementWindow window = new UserManagementWindow();
+        //    window.Show();
+        //}
         private void UsersButton_Click(object sender, RoutedEventArgs e)
         {
             UserManagementWindow window = new UserManagementWindow();
             window.Show();
         }
+
 
         private void RegistrationsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -83,11 +93,15 @@ namespace ProjectPRN_SE1886
 
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
         {
+            ProjectPRN_SE1886.Notifications window = new ProjectPRN_SE1886.Notifications();
+            window.Show();
 
         }
 
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
+            ProjectPRN_SE1886.Logs window = new ProjectPRN_SE1886.Logs();
+            window.Show();
 
         }
     }
