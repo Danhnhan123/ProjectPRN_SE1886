@@ -188,5 +188,68 @@ namespace ProjectPRN_SE1886
                 return users;
             }
         }
+        public class LogDAO
+        {
+            private readonly PrnProjectContext _context;
+
+            public LogDAO()
+            {
+                _context = new PrnProjectContext();
+            }
+
+            public List<Log> GetAllLogs()
+            {
+                return _context.Logs.Include(l => l.User).OrderByDescending(l => l.Timestamp).ToList();
+            }
+
+
+
+
+            // 📌 Lọc logs theo UserID, Action, khoảng thời gian
+            public List<Log> SearchLogs(int? userId, string action, DateTime? startDate, DateTime? endDate)
+            {
+                var query = _context.Logs.AsQueryable();
+
+                if (userId.HasValue)
+                {
+                    query = query.Where(l => l.UserId == userId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(action) && action != "Tất cả")
+                {
+                    query = query.Where(l => l.Action == action);
+                }
+
+                if (startDate.HasValue)
+                {
+                    query = query.Where(l => l.Timestamp >= startDate.Value);
+                }
+
+                if (endDate.HasValue)
+                {
+                    query = query.Where(l => l.Timestamp <= endDate.Value);
+                }
+
+                return query.OrderByDescending(l => l.Timestamp).ToList();
+            }
+
+            public void DeleteAllLogs()
+            {
+                _context.Logs.RemoveRange(_context.Logs);
+                _context.SaveChanges();
+            }
+
+            public void AddLog(int userId, string action)
+            {
+                var newLog = new Log
+                {
+                    UserId = userId,
+                    Action = action,
+                    Timestamp = DateTime.Now
+                };
+                _context.Logs.Add(newLog);
+                _context.SaveChanges();
+            }
+        }
     }
 }
