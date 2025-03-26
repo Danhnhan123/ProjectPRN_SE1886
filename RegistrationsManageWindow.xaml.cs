@@ -135,7 +135,6 @@ namespace ProjectPRN_SE1886
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Có thể thêm logic tìm kiếm thời gian thực nếu muốn
         }
     }
 }
