@@ -18,8 +18,10 @@
                         Margin="0,0,0,10" Click="UsersButton_Click"/>
                 <Button x:Name="HouseholdsButton" Content="Manage Households" 
                         Margin="0,0,0,10" Click="HouseholdsButton_Click"/>
-                <Button x:Name="RegistrationsButton" Content="Manage Registrations" 
+                <Button x:Name="RegistrationsButton" Content="Registrations" 
                         Margin="0,0,0,10" Click="RegistrationsButton_Click"/>
+                <Button x:Name="RegistrationsManageButton" Content="Manage Registrations" 
+                        Margin="0,0,0,10" Click="RegistrationsManageButton_Click"/>
                 <Button x:Name="MembersButton" Content="Manage Members" 
                         Margin="0,0,0,10" Click="MembersButton_Click"/>
                 <Button x:Name="NotificationsButton" Content="Manage Notifications" 

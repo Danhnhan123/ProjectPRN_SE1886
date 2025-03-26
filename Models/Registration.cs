@@ -9,6 +9,8 @@ public partial class Registration
 
     public int? UserId { get; set; }
 
+    public int? HouseholdId { get; set; }
+
     public string RegistrationType { get; set; } = null!;
 
     public DateOnly StartDate { get; set; }
@@ -22,6 +24,8 @@ public partial class Registration
     public string? Comments { get; set; }
 
     public virtual User? ApprovedByNavigation { get; set; }
+
+    public virtual Household? Household { get; set; }
 
     public virtual User? User { get; set; }
 }

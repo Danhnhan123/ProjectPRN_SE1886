@@ -1,0 +1,56 @@
+﻿<Window x:Class="ProjectPRN_SE1886.RegistrationsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN_SE1886"
+        mc:Ignorable="d"
+        Title="RegistrationsWindow" Height="600" Width="810">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="CurrentUserTextBlock" Grid.Row="0" Margin="0,0,0,10" FontWeight="Bold"/>
+
+        <Label Content="Household Address:" Grid.Row="1" Margin="0,0,0,5"/>
+        <ComboBox x:Name="HouseholdAddressComboBox" Grid.Row="1" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"
+                  IsEditable="True" TextBoxBase.TextChanged="HouseholdAddressComboBox_TextChanged"/>
+
+        <Label Content="Registration Type:" Grid.Row="2" Margin="0,0,0,5"/>
+        <ComboBox x:Name="RegistrationTypeComboBox" Grid.Row="2" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"/>
+
+        <Label Content="Start Date:" Grid.Row="3" Margin="0,0,0,5"/>
+        <DatePicker x:Name="StartDatePicker" Grid.Row="3" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"
+                    SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
+
+        <Label Content="End Date:" Grid.Row="4" Margin="0,0,0,5"/>
+        <DatePicker x:Name="EndDatePicker" Grid.Row="4" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"/>
+
+        <Label Content="Comments:" Grid.Row="5" Margin="0,0,0,5"/>
+        <TextBox x:Name="CommentsTextBox" Grid.Row="5" Margin="120,0,0,5" Width="650" Height="50" HorizontalAlignment="Left"
+                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+        <Button x:Name="SubmitButton" Content="Submit" Grid.Row="6" Width="100" HorizontalAlignment="Left" Click="SubmitButton_Click" Margin="670,0,0,26" Grid.RowSpan="2"/>
+
+        <Label Grid.Row="7">History:</Label>
+        <DataGrid x:Name="RegistrationHistoryDataGrid" Grid.Row="8" Margin="0,10,0,0" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Household Address" Binding="{Binding HouseholdAddress}" Width="*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding RegistrationType}" Width="100"/>
+                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="100"/>
+                <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="100"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                <DataGridTextColumn Header="Comments" Binding="{Binding Comments}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

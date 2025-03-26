@@ -44,46 +44,41 @@ public partial class PrnProjectContext : DbContext
     {
         modelBuilder.Entity<Household>(entity =>
         {
-            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6ECCCB44588");
+            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6EC409BBDBB");
 
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
-            entity.Property(e => e.Address).HasColumnType("text");
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.HeadOfHouseholdId).HasColumnName("HeadOfHouseholdID");
 
             entity.HasOne(d => d.HeadOfHousehold).WithMany(p => p.Households)
                 .HasForeignKey(d => d.HeadOfHouseholdId)
-                .HasConstraintName("FK__Household__HeadO__4E88ABD4");
+                .HasConstraintName("FK__Household__HeadO__48CFD27E");
         });
 
         modelBuilder.Entity<HouseholdMember>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B382F912BAC");
+            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B38AD5A244C");
 
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
-            entity.Property(e => e.Relationship)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Relationship).HasMaxLength(50);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Household).WithMany(p => p.HouseholdMembers)
                 .HasForeignKey(d => d.HouseholdId)
-                .HasConstraintName("FK__Household__House__5812160E");
+                .HasConstraintName("FK__Household__House__46E78A0C");
 
             entity.HasOne(d => d.User).WithMany(p => p.HouseholdMembers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Household__UserI__59063A47");
+                .HasConstraintName("FK__Household__UserI__47DBAE45");
         });
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A8D017A67B");
+            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A836937F0F");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
-            entity.Property(e => e.Action)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+            entity.Property(e => e.Action).HasMaxLength(100);
             entity.Property(e => e.Timestamp)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -91,16 +86,15 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Logs__UserID__619B8048");
+                .HasConstraintName("FK__Logs__UserID__49C3F6B7");
         });
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32189EFB32");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E329304F66A");
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.IsRead).HasDefaultValue(false);
-            entity.Property(e => e.Message).HasColumnType("text");
             entity.Property(e => e.SentDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -108,53 +102,45 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Notificat__UserI__5DCAEF64");
+                .HasConstraintName("FK__Notificat__UserI__4AB81AF0");
         });
 
         modelBuilder.Entity<Registration>(entity =>
         {
-            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF58830079970E2");
+            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF58830A8D9E448");
 
             entity.Property(e => e.RegistrationId).HasColumnName("RegistrationID");
-            entity.Property(e => e.Comments).HasColumnType("text");
-            entity.Property(e => e.RegistrationType)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
+            entity.Property(e => e.RegistrationType).HasMaxLength(20);
             entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasMaxLength(10)
                 .HasDefaultValue("Pending");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.ApprovedByNavigation).WithMany(p => p.RegistrationApprovedByNavigations)
                 .HasForeignKey(d => d.ApprovedBy)
-                .HasConstraintName("FK__Registrat__Appro__5535A963");
+                .HasConstraintName("FK__Registrat__Appro__4BAC3F29");
+
+            entity.HasOne(d => d.Household).WithMany(p => p.Registrations)
+                .HasForeignKey(d => d.HouseholdId)
+                .HasConstraintName("FK__Registrat__House__4D94879B");
 
             entity.HasOne(d => d.User).WithMany(p => p.RegistrationUsers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Registrat__UserI__5441852A");
+                .HasConstraintName("FK__Registrat__UserI__4CA06362");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC2D532683");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC8112C010");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534967217D7").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053485CB330B").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.Address).HasColumnType("text");
-            entity.Property(e => e.Email)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.FullName)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.Password)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.Role)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FullName).HasMaxLength(100);
+            entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.Role).HasMaxLength(20);
         });
 
         OnModelCreatingPartial(modelBuilder);
@@ -162,3 +148,4 @@ public partial class PrnProjectContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+
