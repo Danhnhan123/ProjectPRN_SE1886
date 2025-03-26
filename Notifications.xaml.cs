@@ -12,7 +12,7 @@ namespace ProjectPRN_SE1886
     {
         private List<Notification> _allNotifications;
 
-        public Notifications()
+        public Notifications(User currentUser)
         {
             InitializeComponent();
             LoadNotifications();

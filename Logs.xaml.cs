@@ -11,7 +11,7 @@ namespace ProjectPRN_SE1886
     {
         private readonly DAO.LogDAO _logDAO;
 
-        public Logs()
+        public Logs(Models.User currentUser)
         {
             InitializeComponent();
             _logDAO = new DAO.LogDAO(); 

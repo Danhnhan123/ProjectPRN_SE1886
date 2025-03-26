@@ -95,17 +95,20 @@ namespace ProjectPRN_SE1886
 
         private void MembersButton_Click(object sender, RoutedEventArgs e)
         {
+            
 
         }
 
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Notifications window = new Notifications(_currentUser);
+            window.Show();
         }
 
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Logs window = new Logs(_currentUser);
+            window.Show();
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
