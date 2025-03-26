@@ -51,14 +51,7 @@ namespace ProjectPRN_SE1886
             StartDatePicker.SelectedDate = DateTime.Today.AddDays(1);
             StartDatePicker.BlackoutDates.AddDatesInPast();
 
-            // Kiểm tra nếu user là thành viên trong Household
-            var householdMember = _registrationsDAO.GetHouseholdMemberByUserId(_currentUser.UserId);
-            if (householdMember != null && householdMember.HouseholdId.HasValue)
-            {
-                RegistrationTypeComboBox.ItemsSource = new List<string> { "MoveOut" };
-                RegistrationTypeComboBox.SelectedIndex = 0;
-                RegistrationTypeComboBox.IsEnabled = false;
-            }
+            
 
             // Thiết lập ràng buộc cho EndDate
             EndDatePicker.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, StartDatePicker.SelectedDate.Value.AddDays(9)));

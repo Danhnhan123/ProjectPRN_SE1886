@@ -22,21 +22,21 @@
         <TextBlock x:Name="CurrentUserTextBlock" Grid.Row="0" Margin="0,0,0,10" FontWeight="Bold"/>
 
         <Label Content="Household Address:" Grid.Row="1" Margin="0,0,0,5"/>
-        <ComboBox x:Name="HouseholdAddressComboBox" Grid.Row="1" Margin="120,0,0,5" Width="300" HorizontalAlignment="Left"
+        <ComboBox x:Name="HouseholdAddressComboBox" Grid.Row="1" Margin="120,0,0,5" Width="660" HorizontalAlignment="Left"
                   IsEditable="True" TextBoxBase.TextChanged="HouseholdAddressComboBox_TextChanged"/>
 
         <Label Content="Registration Type:" Grid.Row="2" Margin="0,0,0,5"/>
-        <ComboBox x:Name="RegistrationTypeComboBox" Grid.Row="2" Margin="120,0,0,5" Width="200" HorizontalAlignment="Left"/>
+        <ComboBox x:Name="RegistrationTypeComboBox" Grid.Row="2" Margin="120,0,0,5" Width="660" HorizontalAlignment="Left"/>
 
         <Label Content="Start Date:" Grid.Row="3" Margin="0,0,0,5"/>
-        <DatePicker x:Name="StartDatePicker" Grid.Row="3" Margin="120,0,0,5" Width="200" HorizontalAlignment="Left"
+        <DatePicker x:Name="StartDatePicker" Grid.Row="3" Margin="120,0,0,5" Width="660" HorizontalAlignment="Left"
                     SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
 
         <Label Content="End Date:" Grid.Row="4" Margin="0,0,0,5"/>
-        <DatePicker x:Name="EndDatePicker" Grid.Row="4" Margin="120,0,0,5" Width="200" HorizontalAlignment="Left"/>
+        <DatePicker x:Name="EndDatePicker" Grid.Row="4" Margin="120,0,0,5" Width="660" HorizontalAlignment="Left"/>
 
         <Label Content="Comments:" Grid.Row="5" Margin="0,0,0,5"/>
-        <TextBox x:Name="CommentsTextBox" Grid.Row="5" Margin="120,0,0,5" Width="300" Height="50" HorizontalAlignment="Left"
+        <TextBox x:Name="CommentsTextBox" Grid.Row="5" Margin="120,0,0,5" Width="660" Height="50" HorizontalAlignment="Left"
                  AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
 
         <Button x:Name="SubmitButton" Content="Submit" Grid.Row="6" Width="100" HorizontalAlignment="Right" Click="SubmitButton_Click"/>
