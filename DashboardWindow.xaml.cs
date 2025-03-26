@@ -81,9 +81,15 @@ namespace ProjectPRN_SE1886
             window.Show();
         }
 
+        private void RegistrationsManageButton_Click(object sender, RoutedEventArgs e)
+        {
+            RegistrationsManageWindow window = new RegistrationsManageWindow(_user);
+            window.Show();
+        }
         private void RegistrationsButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RegistrationsWindow wndow = new RegistrationsWindow(_user);
+            wndow.Show();
         }
 
         private void MembersButton_Click(object sender, RoutedEventArgs e)
