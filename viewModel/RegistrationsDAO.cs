@@ -10,37 +10,32 @@ namespace ProjectPRN_SE1886
     {
         private readonly PrnProjectContext _context;
 
-        // Constructor nhận DbContext thông qua dependency injection hoặc khởi tạo trực tiếp
         public RegistrationsDAO()
         {
             _context = new PrnProjectContext();
         }
 
-        // Lấy danh sách tất cả các hộ gia đình
         public List<Household> GetHouseholds()
         {
             return _context.Households
-                .Include(h => h.HeadOfHousehold) // Bao gồm thông tin HeadOfHousehold nếu cần
+                .Include(h => h.HeadOfHousehold) 
                 .ToList();
         }
 
-        // Lấy thông tin thành viên hộ gia đình theo UserId
         public HouseholdMember GetHouseholdMemberByUserId(int userId)
         {
             return _context.HouseholdMembers
                 .FirstOrDefault(hm => hm.UserId == userId);
         }
 
-        // Lấy danh sách các đăng ký theo UserId
         public List<Registration> GetRegistrationsByUserId(int userId)
         {
             return _context.Registrations
                 .Where(r => r.UserId == userId)
-                .Include(r => r.Household) // Bao gồm thông tin hộ gia đình nếu cần
+                .Include(r => r.Household) 
                 .ToList();
         }
 
-        // Lấy danh sách các Head of Household (nếu vẫn cần cho các chức năng khác)
         public List<User> GetHeadOfHouseholds()
         {
             var headIds = _context.Households
@@ -54,7 +49,6 @@ namespace ProjectPRN_SE1886
                 .ToList();
         }
 
-        // Thêm một đăng ký mới vào cơ sở dữ liệu
         public void AddRegistration(Registration registration)
         {
             try
@@ -76,7 +70,6 @@ namespace ProjectPRN_SE1886
                 .ToList();
         }
 
-        // Lấy các đăng ký đã xử lý (Approved hoặc Rejected)
         public List<Registration> GetProcessedRegistrations()
         {
             return _context.Registrations
@@ -87,7 +80,6 @@ namespace ProjectPRN_SE1886
                 .ToList();
         }
 
-        // Lấy đăng ký theo ID
         public Registration GetRegistrationById(int registrationId)
         {
             return _context.Registrations
@@ -108,7 +100,6 @@ namespace ProjectPRN_SE1886
             }
         }
 
-        // Thêm thành viên hộ gia đình
         public void AddHouseholdMember(HouseholdMember member)
         {
             try
@@ -122,7 +113,6 @@ namespace ProjectPRN_SE1886
             }
         }
 
-        // Cập nhật thành viên hộ gia đình
         public void UpdateHouseholdMember(HouseholdMember member)
         {
             try
