@@ -36,6 +36,7 @@ public partial class PrnProjectContext : DbContext
         builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         var configuration = builder.Build();
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
+
     }
     //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
     //        => optionsBuilder.UseSqlServer("Server= dunghoa\\SQLEXPRESS;uid=sa;password=123;database=PRN_Project;Encrypt=True;TrustServerCertificate=True;");
@@ -44,11 +45,16 @@ public partial class PrnProjectContext : DbContext
     {
         modelBuilder.Entity<Household>(entity =>
         {
-            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6EC409BBDBB");
+            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6EC040DE786");
+
+            entity.HasIndex(e => e.HouseholdNumber, "UQ_HouseholdNumber").IsUnique();
 
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.HeadOfHouseholdId).HasColumnName("HeadOfHouseholdID");
+            entity.Property(e => e.HouseholdNumber)
+                .HasMaxLength(20)
+                .HasDefaultValue("");
 
             entity.HasOne(d => d.HeadOfHousehold).WithMany(p => p.Households)
                 .HasForeignKey(d => d.HeadOfHouseholdId)
@@ -57,7 +63,7 @@ public partial class PrnProjectContext : DbContext
 
         modelBuilder.Entity<HouseholdMember>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B38AD5A244C");
+            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B3841638C20");
 
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
@@ -75,7 +81,7 @@ public partial class PrnProjectContext : DbContext
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A836937F0F");
+            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A815B9F375");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.Action).HasMaxLength(100);
@@ -91,7 +97,7 @@ public partial class PrnProjectContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E329304F66A");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E324634580A");
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.IsRead).HasDefaultValue(false);
@@ -107,7 +113,7 @@ public partial class PrnProjectContext : DbContext
 
         modelBuilder.Entity<Registration>(entity =>
         {
-            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF58830A8D9E448");
+            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF5883026765377");
 
             entity.Property(e => e.RegistrationId).HasColumnName("RegistrationID");
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
@@ -123,20 +129,26 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.Household).WithMany(p => p.Registrations)
                 .HasForeignKey(d => d.HouseholdId)
-                .HasConstraintName("FK__Registrat__House__4D94879B");
+                .HasConstraintName("FK__Registrat__House__4CA06362");
 
             entity.HasOne(d => d.User).WithMany(p => p.RegistrationUsers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Registrat__UserI__4CA06362");
+                .HasConstraintName("FK__Registrat__UserI__4D94879B");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC8112C010");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC81459932");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053485CB330B").IsUnique();
+            entity.HasIndex(e => e.Cccd, "UQ_CCCD").IsUnique();
+
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053485A2C165").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Cccd)
+                .HasMaxLength(12)
+                .HasDefaultValue("")
+                .HasColumnName("CCCD");
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.FullName).HasMaxLength(100);
             entity.Property(e => e.Password).HasMaxLength(255);

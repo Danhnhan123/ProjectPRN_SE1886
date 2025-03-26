@@ -13,6 +13,8 @@ public partial class Household
 
     public DateOnly? CreatedDate { get; set; }
 
+    public string HouseholdNumber { get; set; } = null!;
+
     public virtual User? HeadOfHousehold { get; set; }
 
     public virtual ICollection<HouseholdMember> HouseholdMembers { get; set; } = new List<HouseholdMember>();
