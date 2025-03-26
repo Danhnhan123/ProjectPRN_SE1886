@@ -86,7 +86,6 @@ namespace ProjectPRN_SE1886
                 .FirstOrDefault(r => r.RegistrationId == registrationId);
         }
 
-        // Cập nhật đăng ký
         public void UpdateRegistration(Registration registration)
         {
             try
