@@ -152,6 +152,34 @@ namespace ProjectPRN_SE1886
                 return false;
             }
 
+            if (!StartDatePicker.SelectedDate.HasValue)
+            {
+                MessageBox.Show("Please select a Start Date.");
+                return false;
+            }
+
+            var selectedType = RegistrationTypeComboBox.SelectedItem?.ToString();
+            if (selectedType == "Temporary" || selectedType == "TemporaryStay")
+            {
+                if (!EndDatePicker.SelectedDate.HasValue)
+                {
+                    MessageBox.Show("Please select an End Date for Temporary or TemporaryStay registration.");
+                    return false;
+                }
+
+                if (selectedType == "Temporary" && EndDatePicker.SelectedDate <= StartDatePicker.SelectedDate)
+                {
+                    MessageBox.Show("End Date must be greater than Start Date for Temporary registration.");
+                    return false;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(CommentsTextBox.Text))
+            {
+                MessageBox.Show("Please provide comments for the registration.");
+                return false;
+            }
+
             return true;
         }
 
