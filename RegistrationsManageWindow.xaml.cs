@@ -35,7 +35,7 @@ namespace ProjectPRN_SE1886
                 DetailFullName.Text = $"Name: {selected.User?.FullName ?? "N/A"}";
                 DetailEmail.Text = $"Email: {selected.User?.Email ?? "N/A"}";
                 DetailCCCD.Text = $"CCCD: {selected.User?.Cccd ?? "N/A"}";
-                Details.Text = $"Head of Household: {selected.Household?.HeadOfHousehold?.FullName ?? "N/A"}, CCCD: {selected.Household?.HeadOfHousehold?.Cccd ?? "N/A"}\nAddress: {selected.Household?.Address ?? "N/A"}"; 
+                Details.Text = $"Head of Household: {selected.Household?.HeadOfHousehold?.FullName ?? "N/A"}, CCCD: {selected.Household?.HeadOfHousehold?.Cccd ?? "N/A"}\nAddress: {selected.Household?.Address ?? "N/A"}";
                 DetailType.Text = $"Type: {selected.RegistrationType}";
                 DetailStartDate.Text = $"Start Date: {selected.StartDate}";
                 DetailEndDate.Text = $"End Date: {selected.EndDate ?? DateOnly.MinValue}";
@@ -45,53 +45,62 @@ namespace ProjectPRN_SE1886
         }
 
         private void ApproveButton_Click(object sender, RoutedEventArgs e)
-{
-    if (PendingRegistrationsDataGrid.SelectedItem is Registration selected && 
-        (!string.IsNullOrEmpty(RelationshipTextBox.Text) || selected.RegistrationType == "MoveOut"))
-    {
-        selected.Status = "Approved";
-        selected.ApprovedBy = _currentUser.UserId;
-        
-        if (selected.RegistrationType == "MoveOut")
         {
-            var member = _registrationsDAO.GetHouseholdMemberByUserId(selected.UserId.Value);
-            if (member != null && member.HouseholdId == selected.HouseholdId)
+            if (PendingRegistrationsDataGrid.SelectedItem is Registration selected)
             {
-                _registrationsDAO.RemoveHouseholdMember(member); // Use DAO to remove the member
-            }
-            MessageBox.Show("Registration approved and user removed from household!");
-        }
-        else
-        {
-            var member = _registrationsDAO.GetHouseholdMemberByUserId(selected.UserId.Value);
-            if (member != null)
-            {
-                member.HouseholdId = selected.HouseholdId;
-                member.Relationship = RelationshipTextBox.Text;
-                _registrationsDAO.UpdateHouseholdMember(member);
+                // Check if relationship is required and provided
+                bool isRelationshipValid = selected.RegistrationType == "MoveOut" ||
+                                        (!string.IsNullOrEmpty(RelationshipTextBox.Text?.Trim()));
+
+                if (!isRelationshipValid)
+                {
+                    MessageBox.Show("Please enter a relationship for this registration type.");
+                    return;
+                }
+
+                selected.Status = "Approved";
+                selected.ApprovedBy = _currentUser.UserId;
+
+                if (selected.RegistrationType == "MoveOut")
+                {
+                    var member = _registrationsDAO.GetHouseholdMemberByUserId(selected.UserId.Value);
+                    if (member != null && member.HouseholdId == selected.HouseholdId)
+                    {
+                        _registrationsDAO.RemoveHouseholdMember(member);
+                    }
+                    MessageBox.Show("Registration approved and user removed from household!");
+                }
+                else
+                {
+                    var member = _registrationsDAO.GetHouseholdMemberByUserId(selected.UserId.Value);
+                    if (member != null)
+                    {
+                        member.HouseholdId = selected.HouseholdId;
+                        member.Relationship = RelationshipTextBox.Text.Trim();
+                        _registrationsDAO.UpdateHouseholdMember(member);
+                    }
+                    else
+                    {
+                        var newMember = new HouseholdMember
+                        {
+                            HouseholdId = selected.HouseholdId,
+                            UserId = selected.UserId.Value,
+                            Relationship = RelationshipTextBox.Text.Trim()
+                        };
+                        _registrationsDAO.AddHouseholdMember(newMember);
+                    }
+                    MessageBox.Show("Registration approved and user added to household!");
+                }
+
+                _registrationsDAO.UpdateRegistration(selected);
+                LoadData();
+                ClearDetails();
             }
             else
             {
-                var newMember = new HouseholdMember
-                {
-                    HouseholdId = selected.HouseholdId,
-                    UserId = selected.UserId.Value,
-                    Relationship = RelationshipTextBox.Text
-                };
-                _registrationsDAO.AddHouseholdMember(newMember);
+                MessageBox.Show("Please select a registration.");
             }
-            MessageBox.Show("Registration approved and user added to household!");
         }
-
-        _registrationsDAO.UpdateRegistration(selected);
-        LoadData();
-        ClearDetails();
-    }
-    else
-    {
-        MessageBox.Show("Please select a registration and enter a relationship (except for MoveOut type).");
-    }
-}
         private void RejectButton_Click(object sender, RoutedEventArgs e)
         {
             if (PendingRegistrationsDataGrid.SelectedItem is Registration selected)
