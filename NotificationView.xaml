@@ -1,0 +1,67 @@
+﻿<Window x:Class="ProjectPRN_SE1886.NotificationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPRN_SE1886"
+        mc:Ignorable="d"
+        Title="NotificationView" Height="500" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Input -->
+            <RowDefinition Height="*"/>
+            <!-- List -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+        <!-- INPUT: Chọn người & Nhập nội dung -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0" VerticalAlignment="Center">
+
+            <!-- Label: Người nhận -->
+            <TextBlock Text="Người nhận:"
+               VerticalAlignment="Center"
+               Margin="5" Width="80"/>
+
+            <!-- ComboBox: Chọn người -->
+            <ComboBox ItemsSource="{Binding Users}"
+              SelectedItem="{Binding SelectedUser}"
+              DisplayMemberPath="FullName"
+              Width="200" Margin="5"/>
+
+            <!-- Label: Nội dung -->
+            <TextBlock Text="Nội dung:"
+               VerticalAlignment="Center"
+               Margin="15,0,5,0" Width="70"/>
+
+            <!-- TextBox: Nội dung thông báo -->
+            <TextBox Text="{Binding NewMessage}"
+             Width="300" Margin="5"
+             VerticalContentAlignment="Center"/>
+        </StackPanel>
+    
+
+        <!-- DANH SÁCH THÔNG BÁO -->
+        <DataGrid ItemsSource="{Binding Notifications}" 
+                  SelectedItem="{Binding SelectedNotification}" 
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  Margin="0,0,0,10"
+                  Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding NotificationId}" Width="50"/>
+                <DataGridTextColumn Header="Người nhận" Binding="{Binding User.FullName}" Width="200"/>
+                <DataGridTextColumn Header="Nội dung" Binding="{Binding Message}" Width="*"/>
+                <DataGridCheckBoxColumn Header="Đã đọc" Binding="{Binding IsRead}" Width="80"/>
+                <DataGridTextColumn Header="Ngày gửi" Binding="{Binding SentDate}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- BUTTONS -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Grid.Row="2">
+            <Button Content="Thêm" Command="{Binding AddCommand}" Width="100" Margin="5"/>
+            <Button Content="Sửa" Command="{Binding EditCommand}" Width="100" Margin="5"/>
+            <Button Content="Xóa" Command="{Binding DeleteCommand}" Width="100" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

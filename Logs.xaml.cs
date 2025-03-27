@@ -9,12 +9,12 @@ namespace ProjectPRN_SE1886
 {
     public partial class Logs : Window
     {
-        private readonly DAO.LogDAO _logDAO;
+        private readonly DAOs.LogDAO _logDAO;
 
         public Logs(Models.User currentUser)
         {
             InitializeComponent();
-            _logDAO = new DAO.LogDAO(); 
+            _logDAO = new DAOs.LogDAO(); 
             LoadLogs();
         }
 

@@ -29,6 +29,8 @@
                 <Button x:Name="LogsButton" Content="Manage Logs" 
                         Margin="0,0,0,10" Click="LogsButton_Click"/>
                 <Button x:Name="ProfileButton" Content="Profile" Margin="0,0,0,10" Click="ProfileButton_Click"/>
+                <Button x:Name="NotificationViewButton" Content="NotificationView" Margin="0,0,0,10" Click="NotificationViewButton_Click"/>
+               
                 <Button x:Name="LogoutButton" Content="Logout" 
                         Margin="0,0,0,10" Click="LogoutButton_Click"/>
             </StackPanel>

@@ -56,12 +56,14 @@ namespace ProjectPRN_SE1886
                     MembersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
                     NotificationsButton.IsEnabled = false;
+
                     RegistrationsButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
                     // All buttons enabled
                     break;
             }
         }
+
 
         private void HouseholdsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -95,7 +97,7 @@ namespace ProjectPRN_SE1886
 
         private void MembersButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
 
         }
 
@@ -104,17 +106,29 @@ namespace ProjectPRN_SE1886
             Notifications window = new Notifications(_currentUser);
             window.Show();
         }
+        private void NotificationViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            NotificationView window = new NotificationView(_currentUser);
+            window.Show();
+        }
+
+
 
         private void LogsButton_Click(object sender, RoutedEventArgs e)
         {
             Logs window = new Logs(_currentUser);
             window.Show();
         }
+        
+       
+
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
             UserProfileWindow window = new UserProfileWindow(_currentUser);
             window.Show();
         }
+
+       
     }
 }

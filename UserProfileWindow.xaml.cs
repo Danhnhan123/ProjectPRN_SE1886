@@ -47,7 +47,7 @@ namespace ProjectPRN_SE1886
                 _currentUser.Email = EmailTextBox.Text;
                 _currentUser.Address = txtAddress.Text;
 
-                DAO.UserDAO.UpdateUser(_currentUser);
+                DAOs.UserDAO.UpdateUser(_currentUser);
 
                 MessageBox.Show("Update profile successfully!");
             }
