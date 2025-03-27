@@ -50,7 +50,7 @@ namespace ProjectPRN_SE1886
                 _currentUser.Address = txtAddress.Text;
                 _currentUser.Cccd = txtCccd.Text;
 
-                DAO.UserDAO.UpdateUser(_currentUser);
+                DAOs.UserDAO.UpdateUser(_currentUser);
                 if (Application.Current.Windows.OfType<DashboardWindow>().FirstOrDefault() is DashboardWindow dashboard)
                 {
                     dashboard.UpdateProfileStatus();

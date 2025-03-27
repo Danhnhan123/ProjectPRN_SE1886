@@ -133,5 +133,11 @@ namespace ProjectPRN_SE1886
             UserProfileWindow window = new UserProfileWindow(_currentUser);
             window.Show();
         }
+
+        private void NotificationViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            NotificationView window = new NotificationView(_currentUser);
+            window.Show();
+        }
     }
 }

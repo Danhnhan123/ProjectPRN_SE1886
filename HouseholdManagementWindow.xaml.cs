@@ -60,7 +60,7 @@ namespace ProjectPRN_SE1886
             string h = HeadOfHouseholdComboBox.Text;
             string n = HouseholdNumberTextBox.Text;
 
-            var user = DAO.UserDAO.GetUserByCccd(h);
+            var user = DAOs.UserDAO.GetUserByCccd(h);
             if (user == null)
             {
                 return;
@@ -125,7 +125,12 @@ namespace ProjectPRN_SE1886
         {
             if (HouseholdsDataGrid.SelectedItem is Household selectedHousehold)
             {
-                selectedHousehold.HeadOfHouseholdId = DAO.UserDAO.GetUserByCccd(HeadOfHouseholdComboBox.Text).UserId;
+                var user = DAOs.UserDAO.GetUserByCccd(HeadOfHouseholdComboBox.Text);
+                if (user == null)
+                {
+                    return;
+                }
+                selectedHousehold.HeadOfHouseholdId = user.UserId;
                 selectedHousehold.Address = AddressTextBox.Text;
                 selectedHousehold.HouseholdNumber = HouseholdNumberTextBox.Text;
                 selectedHousehold.CreatedDate = CreatedDatePicker.SelectedDate.HasValue
