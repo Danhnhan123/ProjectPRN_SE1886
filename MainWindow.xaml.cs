@@ -21,12 +21,12 @@ namespace ProjectPRN_SE1886
     public partial class MainWindow : Window
     {
 
-        private readonly DAO.UserDAO _userDAO;
+        private readonly DAOs.UserDAO _userDAO;
 
         public MainWindow()
         {
             InitializeComponent();
-            _userDAO = new DAO.UserDAO();
+            _userDAO = new DAOs.UserDAO();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)

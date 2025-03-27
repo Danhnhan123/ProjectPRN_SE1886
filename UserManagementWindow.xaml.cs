@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.IdentityModel.Tokens;
 using ProjectPRN_SE1886.Models;
-using static ProjectPRN_SE1886.DAO;
+using static ProjectPRN_SE1886.DAOs;
 
 namespace ProjectPRN_SE1886
 {
@@ -93,7 +93,15 @@ namespace ProjectPRN_SE1886
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!FullnameSearchTextBox.Text.IsNullOrEmpty() && !EmailTextBox.Text.IsNullOrEmpty() && !PasswordTextBox.Text.IsNullOrEmpty() && !cbRole.SelectedItem.ToString().IsNullOrEmpty()) {
+            if (!FullnameTextBox.Text.IsNullOrEmpty() && !EmailTextBox.Text.IsNullOrEmpty() && !PasswordTextBox.Text.IsNullOrEmpty() && !cbRole.SelectedItem.ToString().IsNullOrEmpty()) {
+                string email = EmailTextBox.Text;
+
+                if (UserDAO.IsEmailExists(email))
+                {
+                    MessageBox.Show("Email is existed! Please enter another email.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 User household = new User
                 {
                     FullName = FullnameTextBox.Text,
@@ -102,13 +110,13 @@ namespace ProjectPRN_SE1886
                     Role = cbRole.SelectedItem.ToString(),
                 };
                 UserDAO.AddUser(household);
-                MessageBox.Show("User added successfully!");
+                MessageBox.Show("User added successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadInitialData2();
                 ClearInputs();
             }
             else
             {
-                MessageBox.Show("Please fill in all fields!");
+                MessageBox.Show("Please fill in all fields!", "Error", MessageBoxButton.OK,MessageBoxImage.Error);
             }
 
         }
@@ -122,13 +130,13 @@ namespace ProjectPRN_SE1886
                 selectedHousehold.Password = PasswordTextBox.Text;
                 selectedHousehold.Role = cbRole.SelectedItem.ToString();
                 UserDAO.UpdateUser(selectedHousehold);
-                MessageBox.Show("User updated successfully!");
+                MessageBox.Show("User updated successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadInitialData2();
                 ClearInputs();
             }
             else
             {
-                MessageBox.Show("Please select a user to edit!");
+                MessageBox.Show("Please select a user to edit!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -137,13 +145,12 @@ namespace ProjectPRN_SE1886
             if (UserDataGrid.SelectedItem is User selectedHousehold)
             {
                 UserDAO.DeleteUser(selectedHousehold.UserId);
-                MessageBox.Show("User deleted successfully!");
                 LoadInitialData2();
                 ClearInputs();
             }
             else
             {
-                MessageBox.Show("Please select a user to delete!");
+                MessageBox.Show("Please select a user to delete!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

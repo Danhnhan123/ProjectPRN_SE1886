@@ -11,11 +11,14 @@ namespace ProjectPRN_SE1886
     public partial class Notifications : Window
     {
         private List<Notification> _allNotifications;
+        private int currentUserId;
 
         public Notifications(User currentUser)
         {
             InitializeComponent();
+            currentUserId = currentUser.UserId;
             LoadNotifications();
+            
         }
 
         private void LoadNotifications()
@@ -24,7 +27,7 @@ namespace ProjectPRN_SE1886
             {
                 using (var context = new PrnProjectContext())
                 {
-                    int currentUserId = 1;
+
 
                     var notifications = context.Notifications
                         .Where(n => n.UserId == currentUserId)

@@ -1,0 +1,46 @@
+﻿<Window x:Class="ProjectPRN_SE1886.MemberWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Xem Thành Viên" Height="450" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock Text="Member List" FontSize="20" FontWeight="Bold"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <!-- Data Display -->
+            <StackPanel Grid.Column="1">
+                <GroupBox Header="Search" Margin="0,0,0,10">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Label Content="Household Number:"/>
+                        <ComboBox x:Name="RoleComboBox" 
+                             Width="150" Margin="0,0,10,0" SelectionChanged="cbRole_selection">
+                        </ComboBox>
+                        <Label Content="Fullname:"/>
+                        <TextBox x:Name="FullnameSearchTextBox" 
+                             Width="150" Margin="0,0,10,0" KeyDown="txtname_keydown"/>
+                        <Label Content="Relationship:"/>
+                        <TextBox x:Name="RelationshipSearchTextBox" 
+                            Width="150" Margin="0,0,10,0" KeyDown="txtAddress_keydown"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="False" 
+                     IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="*"/>
+                        <DataGridTextColumn Header="Household Number" Binding="{Binding Household.HouseholdNumber}" Width="*"/>
+                        <DataGridTextColumn Header="Fullname" Binding="{Binding User.Fullname}" Width="*"/>
+                        <DataGridTextColumn Header="Relationship" Binding="{Binding Relationship}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

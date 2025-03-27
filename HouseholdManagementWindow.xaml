@@ -29,13 +29,16 @@
                     <TextBox x:Name="HouseholdIdTextBox" IsReadOnly="True" Margin="0,0,0,10"/>
 
                     <TextBlock Text="Head of Household" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="HeadOfHouseholdComboBox" Margin="0,0,0,10"/>
+                    <TextBox x:Name="HeadOfHouseholdComboBox" Margin="0,0,0,10"/>
 
                     <TextBlock Text="Address" Margin="0,0,0,5"/>
                     <TextBox x:Name="AddressTextBox" Margin="0,0,0,10"/>
 
                     <TextBlock Text="Created Date" Margin="0,0,0,5"/>
-                    <DatePicker x:Name="CreatedDatePicker" Margin="0,0,0,20"/>
+                    <DatePicker x:Name="CreatedDatePicker" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Household Number" Margin="0,0,0,5"/>
+                    <TextBox x:Name="HouseholdNumberTextBox" Margin="0,0,0,20"/>
 
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="AddButton" Content="Add" Width="80" 
@@ -53,8 +56,8 @@
                 <GroupBox Header="Search" Margin="0,0,0,10">
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <Label Content="Head of household:"/>
-                            <ComboBox x:Name="HeadOfHouseholdSearchComboBox" 
-                             Width="150" Margin="0,0,10,0" SelectionChanged="head_selection"/>
+                            <TextBox x:Name="HeadOfHouseholdSearchComboBox" 
+                             Width="150" Margin="0,0,10,0" KeyDown="head_selection"/>
                         <Label Content="Address:"/>
                             <TextBox x:Name="AddressSearchTextBox" 
                             Width="150" Margin="0,0,10,0" KeyDown="address_keydown"/>
@@ -69,7 +72,9 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding HouseholdId}" Width="100"/>
                         <DataGridTextColumn Header="Head" Binding="{Binding HeadOfHousehold.FullName}" Width="*"/>
+                        <DataGridTextColumn Header="CCCD" Binding="{Binding HeadOfHousehold.Cccd}" Width="*"/>
                         <DataGridTextColumn Header="Address" Binding="{Binding Address}" Width="*"/>
+                        <DataGridTextColumn Header="Household number" Binding="{Binding HouseholdNumber}" Width="*"/>
                         <DataGridTextColumn Header="Created" Binding="{Binding CreatedDate, StringFormat=d}" Width="110"/>
                     </DataGrid.Columns>
                 </DataGrid>

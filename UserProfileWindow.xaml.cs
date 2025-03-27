@@ -31,6 +31,7 @@ namespace ProjectPRN_SE1886
             PasswordTextBox.Text = _currentUser.Password;
             EmailTextBox.Text = _currentUser.Email;
             txtAddress.Text = _currentUser.Address;
+            txtCccd.Text = _currentUser.Cccd;
 
         }
 
@@ -40,15 +41,20 @@ namespace ProjectPRN_SE1886
             if (!string.IsNullOrEmpty(FullnameTextBox.Text) &&
         !string.IsNullOrEmpty(PasswordTextBox.Text) &&
         !string.IsNullOrEmpty(EmailTextBox.Text) &&
-        !string.IsNullOrEmpty(txtAddress.Text))
+        !string.IsNullOrEmpty(txtAddress.Text) &&
+        !string.IsNullOrEmpty(txtCccd.Text))
             {
                 _currentUser.FullName = FullnameTextBox.Text;
                 _currentUser.Password = PasswordTextBox.Text;
                 _currentUser.Email = EmailTextBox.Text;
                 _currentUser.Address = txtAddress.Text;
+                _currentUser.Cccd = txtCccd.Text;
 
-                DAO.UserDAO.UpdateUser(_currentUser);
-
+                DAOs.UserDAO.UpdateUser(_currentUser);
+                if (Application.Current.Windows.OfType<DashboardWindow>().FirstOrDefault() is DashboardWindow dashboard)
+                {
+                    dashboard.UpdateProfileStatus();
+                }
                 MessageBox.Show("Update profile successfully!");
             }
             else
