@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.IdentityModel.Tokens;
 using ProjectPRN_SE1886.Models;
-using static ProjectPRN_SE1886.DAO;
+using static ProjectPRN_SE1886.DAOs;
 
 namespace ProjectPRN_SE1886
 {

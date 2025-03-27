@@ -10,7 +10,7 @@ using ProjectPRN_SE1886.Models;
 
 namespace ProjectPRN_SE1886
 {
-    class DAO
+    class DAOs
     {
         // UserDAO.cs
         public class UserDAO
