@@ -31,8 +31,6 @@ namespace ProjectPRN_SE1886
             _userRole = userRole;
             LoadHouseholds();
             ConfigureRoleAccess();
-
-            LoadHeadOfHouseholdComboBox();
         }
         private void ConfigureRoleAccess()
         {
@@ -56,44 +54,44 @@ namespace ProjectPRN_SE1886
         {
             HouseholdsDataGrid.ItemsSource = HouseholdDAO.GetAllHouseholds();
         }
-        private void LoadHeadOfHouseholdComboBox()
-        {
-            var users = UserDAO.GetAllUsers();
-
-            // Tạo danh sách mới để thêm "All"
-            var userList = new List<User>();
-
-            // Thêm lựa chọn "All" với UserId = -1
-            userList.Add(new User { UserId = -1, FullName = "All" });
-
-            // Thêm toàn bộ người dùng còn lại
-            userList.AddRange(users);
-            HeadOfHouseholdComboBox.ItemsSource = UserDAO.GetAllUsers();
-            HeadOfHouseholdComboBox.DisplayMemberPath = "FullName";
-            HeadOfHouseholdComboBox.SelectedValuePath = "UserId";
-            HeadOfHouseholdSearchComboBox.ItemsSource = UserDAO.GetAllUsers();
-            HeadOfHouseholdSearchComboBox.DisplayMemberPath = "FullName";
-            HeadOfHouseholdSearchComboBox.SelectedValuePath = "UserId";
-        }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            if (HeadOfHouseholdComboBox.SelectedValue.ToString().IsNullOrEmpty() || AddressTextBox.Text.IsNullOrEmpty() || CreatedDatePicker.SelectedDate.ToString().IsNullOrEmpty())
+            string h = HeadOfHouseholdComboBox.Text;
+            string n = HouseholdNumberTextBox.Text;
+
+            var user = DAO.UserDAO.GetUserByCccd(h);
+            if (user == null)
             {
-                MessageBox.Show("Please fill in all fields!");
+                return;
+            }
+            if (HouseholdDAO.IsHeadOfHouseholdExists(user.UserId))
+            {
+                MessageBox.Show("Head of household is already exists! Please enter another head of household.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (HouseholdDAO.IsHouseholdNumberExists(n))
+            {
+                MessageBox.Show("Household number is already exists! Please enter another household number.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            if (HeadOfHouseholdComboBox.Text.IsNullOrEmpty() || AddressTextBox.Text.IsNullOrEmpty() || CreatedDatePicker.SelectedDate.ToString().IsNullOrEmpty() || HouseholdNumberTextBox.Text.IsNullOrEmpty())
+            {
+                MessageBox.Show("Please fill in all fields!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
                 Household household = new Household
                 {
-                    HeadOfHouseholdId = (int?)HeadOfHouseholdComboBox.SelectedValue,
+                    HeadOfHouseholdId = user.UserId,
                     Address = AddressTextBox.Text,
+                    HouseholdNumber = HouseholdNumberTextBox.Text,
                     CreatedDate = CreatedDatePicker.SelectedDate.HasValue
                    ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                    : DateOnly.FromDateTime(DateTime.Now)
                 };
                 HouseholdDAO.AddHousehold(household);
-                MessageBox.Show("Household added successfully!");
+                MessageBox.Show("Household added successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadHouseholds();
                 ClearInputs();
             }
@@ -102,20 +100,10 @@ namespace ProjectPRN_SE1886
         public void LoadInitialData2()
         {
             var household = HouseholdDAO.GetAllHouseholds();
-            if (HeadOfHouseholdSearchComboBox.SelectedItem != null)
+            if (HeadOfHouseholdSearchComboBox != null && !HeadOfHouseholdSearchComboBox.Text.IsNullOrEmpty())
             {
-                if (HeadOfHouseholdSearchComboBox.SelectedValue != null)
-                {
-                    int selectedUserId = (int)HeadOfHouseholdSearchComboBox.SelectedValue;
-                    if (selectedUserId>0)
-                    {
-                        household = HouseholdDAO.GetHouseholdByName(selectedUserId, household);
-                    }
-                    else
-                    {
-                        household = HouseholdDAO.GetAllHouseholds();
-                    }
-                }
+                string headOfHousehold = HeadOfHouseholdSearchComboBox.Text;
+                household = HouseholdDAO.GetUserByHeadOfHousehold(headOfHousehold, household);
             }
 
             // Tìm kiếm theo ngày từ DatePicker
@@ -125,11 +113,6 @@ namespace ProjectPRN_SE1886
                 household = HouseholdDAO.GetUserByDate(selectedDate, household);
             }
 
-            if (DateSearchPicker != null && !DateSearchPicker.Text.IsNullOrEmpty())
-            {
-                DateOnly address = DateOnly.Parse(DateSearchPicker.Text);
-                household = HouseholdDAO.GetUserByDate(address, household);
-            }
             if (AddressSearchTextBox != null && !AddressSearchTextBox.Text.IsNullOrEmpty())
             {
                 string address = AddressSearchTextBox.Text;
@@ -142,18 +125,20 @@ namespace ProjectPRN_SE1886
         {
             if (HouseholdsDataGrid.SelectedItem is Household selectedHousehold)
             {
-                selectedHousehold.HeadOfHouseholdId = (int?)HeadOfHouseholdComboBox.SelectedValue;
+                selectedHousehold.HeadOfHouseholdId = DAO.UserDAO.GetUserByCccd(HeadOfHouseholdComboBox.Text).UserId;
                 selectedHousehold.Address = AddressTextBox.Text;
+                selectedHousehold.HouseholdNumber = HouseholdNumberTextBox.Text;
                 selectedHousehold.CreatedDate = CreatedDatePicker.SelectedDate.HasValue
                     ? DateOnly.FromDateTime(CreatedDatePicker.SelectedDate.Value)
                     : DateOnly.FromDateTime(DateTime.Now);
                 HouseholdDAO.UpdateHousehold(selectedHousehold);
+                MessageBox.Show("Household updated successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadHouseholds();
                 ClearInputs();
             }
             else
             {
-                MessageBox.Show("Please select a household to edit!");
+                MessageBox.Show("Please select a household to edit!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -167,7 +152,7 @@ namespace ProjectPRN_SE1886
             }
             else
             {
-                MessageBox.Show("Please select a household to delete!");
+                MessageBox.Show("Please select a household to delete!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -176,8 +161,9 @@ namespace ProjectPRN_SE1886
             if (HouseholdsDataGrid.SelectedItem is Household selectedHousehold)
             {
                 HouseholdIdTextBox.Text = selectedHousehold.HouseholdId.ToString();
-                HeadOfHouseholdComboBox.SelectedValue = selectedHousehold.HeadOfHouseholdId;
+                HeadOfHouseholdComboBox.Text = selectedHousehold.HeadOfHousehold.Cccd;
                 AddressTextBox.Text = selectedHousehold.Address;
+                HouseholdNumberTextBox.Text = selectedHousehold.HouseholdNumber;
                 // Chuyển DateOnly sang DateTime để hiển thị trong DatePicker
                 CreatedDatePicker.SelectedDate = selectedHousehold.CreatedDate.HasValue
                     ? selectedHousehold.CreatedDate.Value.ToDateTime(TimeOnly.MinValue)
@@ -186,10 +172,6 @@ namespace ProjectPRN_SE1886
         }
 
 
-        private void head_selection(object sender, SelectionChangedEventArgs e)
-        {
-            LoadInitialData2();
-        }
 
         private void create_change(object sender, SelectionChangedEventArgs e)
         {
@@ -204,9 +186,15 @@ namespace ProjectPRN_SE1886
         private void ClearInputs()
         {
             HouseholdIdTextBox.Text = "";
-            HeadOfHouseholdComboBox.SelectedIndex = -1;
+            HeadOfHouseholdComboBox.Text = "";
             AddressTextBox.Text = "";
+            HouseholdNumberTextBox.Text = "";
             CreatedDatePicker.SelectedDate = null;
+        }
+
+        private void head_selection(object sender, KeyEventArgs e)
+        {
+            LoadInitialData2();
         }
     }
 }

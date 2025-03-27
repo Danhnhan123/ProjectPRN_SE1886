@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectPRN_SE1886"
         mc:Ignorable="d"
-        Title="User Profile" Height="350" Width="800">
+        Title="User Profile" Height="400" Width="800">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -27,6 +27,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Fullname" Margin="0,0,0,5"/>
@@ -36,9 +38,11 @@
                         <TextBlock Grid.Row="2" Grid.Column="0" Text="Password" Margin="0,0,0,5"/>
                         <TextBox Grid.Row="3" Grid.Column="0" x:Name="PasswordTextBox" Width="300" Height="30" Margin="0,0,10,10"/>
                         <TextBlock Grid.Row="2" Grid.Column="1" Text="Address"  Margin="60,0,0,5"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtAddress" Width="300" Height="30" Margin="10,0,0,10">
-                        </TextBox>
-                        <StackPanel Grid.Row="4" Orientation="Horizontal">
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtAddress" Width="300" Height="30" Margin="10,0,0,10"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Cccd"  Margin="0,0,0,5"/>
+                        <TextBox Grid.Row="5" Grid.Column="0" x:Name="txtCccd" Width="300" Height="30" Margin="0,0,10,10"/>
+
+                        <StackPanel Grid.Row="6" Orientation="Horizontal">
                             <Button x:Name="SaveButton" Content="Save" Width="80" Height="25" Margin="0,0,10,0" Click="SaveButton_Click"/>
                         </StackPanel>
                     </Grid>

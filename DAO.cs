@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using ProjectPRN_SE1886.Models;
 
@@ -15,6 +16,22 @@ namespace ProjectPRN_SE1886
         public class UserDAO
         {
             private readonly PrnProjectContext _context;
+
+            public static bool IsEmailExists(string email)
+            {
+                using (var _context = new PrnProjectContext())
+                {
+                    return _context.Users.Any(u => u.Email == email);
+                }
+            }
+
+            public static bool IsCccdExists(string email)
+            {
+                using (var _context = new PrnProjectContext())
+                {
+                    return _context.Users.Any(u => u.Cccd == email);
+                }
+            }
 
             public UserDAO()
             {
@@ -46,6 +63,7 @@ namespace ProjectPRN_SE1886
                 return users;
             }
 
+
             public static List<User> GetUserByEmail(string email, List<User> u)
             {
                 List<User> users = new List<User>();
@@ -70,6 +88,18 @@ namespace ProjectPRN_SE1886
                     }
                 }
                 return users;
+            }
+
+            public static User? GetUserByCccd(string id)
+            {
+                PrnProjectContext _context = new PrnProjectContext();
+                var user = _context.Users.FirstOrDefault(x => x.Cccd == id);
+                if (user == null)
+                {
+                    MessageBox.Show("User with this CCCD does not exist!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                return user;
+
             }
 
             public static List<User> GetUserByAddress(string address, List<User> u)
@@ -105,8 +135,20 @@ namespace ProjectPRN_SE1886
                 var user = _context.Users.Find(userId);
                 if (user != null)
                 {
-                    _context.Users.Remove(user);
-                    _context.SaveChanges();
+                    try
+                    {
+                        _context.Users.Remove(user);
+                        _context.SaveChanges();
+                        MessageBox.Show("User deleted successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        MessageBox.Show("Cannot delete user because it is using.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -114,8 +156,22 @@ namespace ProjectPRN_SE1886
         // HouseholdDAO.cs
         public class HouseholdDAO
         {
+            public static bool IsHeadOfHouseholdExists(int headOfHouseholdId)
+            {
+                using (var context = new PrnProjectContext())
+                {
+                    return context.Households.Any(h => h.HeadOfHouseholdId == headOfHouseholdId);
+                }
+            }
 
-            
+            public static bool IsHouseholdNumberExists(string householdNumber)
+            {
+                using (var context = new PrnProjectContext())
+                {
+                    return context.Households.Any(h => h.HouseholdNumber == householdNumber);
+                }
+            }
+
             public static List<Household> GetAllHouseholds()
             {
                 PrnProjectContext _context = new PrnProjectContext();
@@ -144,8 +200,20 @@ namespace ProjectPRN_SE1886
                 var household = _context.Households.Find(householdId);
                 if (household != null)
                 {
-                    _context.Households.Remove(household);
-                    _context.SaveChanges();
+                    try
+                    {
+                        _context.Households.Remove(household);
+                        _context.SaveChanges();
+                        MessageBox.Show("Household deleted successfully!", "Notification", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        MessageBox.Show("Cannot delete household because it is using.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
 
@@ -154,7 +222,20 @@ namespace ProjectPRN_SE1886
                 List<Household> users = new List<Household>();
                 foreach (var item in u)
                 {
-                    if (item.HeadOfHouseholdId==ename)
+                    if (item.HeadOfHouseholdId == ename)
+                    {
+                        users.Add(item);
+                    }
+                }
+                return users;
+            }
+
+            public static List<Household> GetUserByHeadOfHousehold(string ename, List<Household> u)
+            {
+                List<Household> users = new List<Household>();
+                foreach (var item in u)
+                {
+                    if (item.HeadOfHousehold.Cccd.Contains(ename))
                     {
                         users.Add(item);
                     }

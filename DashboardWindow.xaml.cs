@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.IdentityModel.Tokens;
 using ProjectPRN_SE1886.Models;
 
 namespace ProjectPRN_SE1886
@@ -22,11 +23,15 @@ namespace ProjectPRN_SE1886
     {
         private string _userRole;
         private User _currentUser;
+        private string? _currentCccd;
+        private string? _currentAddress;
 
         public DashboardWindow(User user)
         {
             InitializeComponent();
             _userRole = user.Role;
+            _currentCccd = user.Cccd;
+            _currentAddress = user.Address;
             ConfigureRoleAccess();
             _currentUser = user;
         }
@@ -38,28 +43,46 @@ namespace ProjectPRN_SE1886
                 case "Citizen":
                     UsersButton.IsEnabled = false;
                     HouseholdsButton.IsEnabled = false;
-                    MembersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
                     RegistrationsManageButton.IsEnabled = false;
+                    if (_currentCccd.IsNullOrEmpty() || _currentAddress.IsNullOrEmpty())
+                    {
+                        RegistrationsButton.IsEnabled = false;
+                        MessageBox.Show("You must update your profile first to use the registrations feature!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                    else
+                    {
+                        RegistrationsButton.IsEnabled = true;
+                    }
                     break;
                 case "AreaLeader":
                     UsersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
+                    RegistrationsButton.IsEnabled = false;
                     break;
                 case "Police":
                     UsersButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
+                    RegistrationsButton.IsEnabled = false;
                     break;
                 case "Administrator":
                     HouseholdsButton.IsEnabled = false;
-                    MembersButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
                     NotificationsButton.IsEnabled = false;
                     RegistrationsButton.IsEnabled = false;
+                    RegistrationsManageButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
                     // All buttons enabled
                     break;
+            }
+        }
+
+        public void UpdateProfileStatus()
+        {
+            if (!_currentUser.Cccd.IsNullOrEmpty() && !_currentUser.Address.IsNullOrEmpty())
+            {
+                RegistrationsButton.IsEnabled = true;
             }
         }
 
@@ -91,12 +114,6 @@ namespace ProjectPRN_SE1886
         {
             RegistrationsWindow wndow = new RegistrationsWindow(_currentUser);
             wndow.Show();
-        }
-
-        private void MembersButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-
         }
 
         private void NotificationsButton_Click(object sender, RoutedEventArgs e)

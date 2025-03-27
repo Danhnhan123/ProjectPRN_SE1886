@@ -15,9 +15,9 @@ public partial class User
 
     public string Role { get; set; } = null!;
 
-    public string Address { get; set; } = null!;
+    public string? Address { get; set; } = null!;
 
-    public string Cccd { get; set; } = null!;
+    public string? Cccd { get; set; } = null!;
 
     public virtual ICollection<HouseholdMember> HouseholdMembers { get; set; } = new List<HouseholdMember>();
 
