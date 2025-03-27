@@ -333,4 +333,60 @@ namespace ProjectPRN_SE1886
             }
         }
     }
+
+    public class MemberDAO
+    {
+
+
+
+
+        public static List<HouseholdMember> GetAllHouseholds()
+        {
+            PrnProjectContext _context = new PrnProjectContext();
+            return _context.HouseholdMembers.Include(x => x.Household)  // Thêm Include này
+                         .Include(x => x.User)
+                         .ToList();
+        }
+
+
+
+        public static List<HouseholdMember> GetHouseholdByHouseholdNumber(string ename, List<HouseholdMember> u)
+        {
+            List<HouseholdMember> users = new List<HouseholdMember>();
+            foreach (var item in u)
+            {
+                if (item.Household.HouseholdNumber == ename)
+                {
+                    users.Add(item);
+                }
+            }
+            return users;
+        }
+
+        public static List<HouseholdMember> GetMemberByFullName(string ename, List<HouseholdMember> u)
+        {
+            List<HouseholdMember> users = new List<HouseholdMember>();
+            foreach (var item in u)
+            {
+                if (item.User.FullName.Contains(ename))
+                {
+                    users.Add(item);
+                }
+            }
+            return users;
+        }
+
+        public static List<HouseholdMember> GetMemberByRelationship(string address, List<HouseholdMember> u)
+        {
+            List<HouseholdMember> users = new List<HouseholdMember>();
+            foreach (var item in u)
+            {
+                if (item.Relationship.Contains(address))
+                {
+                    users.Add(item);
+                }
+            }
+            return users;
+        }
+    }
 }
