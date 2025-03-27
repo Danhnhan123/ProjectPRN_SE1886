@@ -34,7 +34,7 @@
                 <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="False" 
                      IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="*"/>
+                        <DataGridTextColumn Header="CCCD" Binding="{Binding User.Cccd}" Width="*"/>
                         <DataGridTextColumn Header="Household Number" Binding="{Binding Household.HouseholdNumber}" Width="*"/>
                         <DataGridTextColumn Header="Fullname" Binding="{Binding User.FullName}" Width="*"/>
                         <DataGridTextColumn Header="Relationship" Binding="{Binding Relationship}" Width="*"/>
