@@ -35,7 +35,8 @@ namespace ProjectPRN_SE1886
                 DetailFullName.Text = $"Name: {selected.User?.FullName ?? "N/A"}";
                 DetailEmail.Text = $"Email: {selected.User?.Email ?? "N/A"}";
                 DetailCCCD.Text = $"CCCD: {selected.User?.Cccd ?? "N/A"}";
-                Details.Text = $"Head of Household: {selected.Household?.HeadOfHousehold?.FullName ?? "N/A"}, CCCD: {selected.Household?.HeadOfHousehold?.Cccd ?? "N/A"}\nAddress: {selected.Household?.Address ?? "N/A"}"; DetailType.Text = $"Type: {selected.RegistrationType}";
+                Details.Text = $"Head of Household: {selected.Household?.HeadOfHousehold?.FullName ?? "N/A"}, CCCD: {selected.Household?.HeadOfHousehold?.Cccd ?? "N/A"}\nAddress: {selected.Household?.Address ?? "N/A"}"; 
+                DetailType.Text = $"Type: {selected.RegistrationType}";
                 DetailStartDate.Text = $"Start Date: {selected.StartDate}";
                 DetailEndDate.Text = $"End Date: {selected.EndDate ?? DateOnly.MinValue}";
                 DetailStatus.Text = $"Status: {selected.Status}";
