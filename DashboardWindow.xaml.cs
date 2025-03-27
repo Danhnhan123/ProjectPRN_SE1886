@@ -45,6 +45,7 @@ namespace ProjectPRN_SE1886
                     HouseholdsButton.IsEnabled = false;
                     LogsButton.IsEnabled = false;
                     RegistrationsManageButton.IsEnabled = false;
+                    MemberManageButton.IsEnabled = false;
                     if (_currentCccd.IsNullOrEmpty() || _currentAddress.IsNullOrEmpty())
                     {
                         RegistrationsButton.IsEnabled = false;
@@ -60,6 +61,7 @@ namespace ProjectPRN_SE1886
                     LogsButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
                     RegistrationsButton.IsEnabled = false;
+                    MemberManageButton.IsEnabled = false;
                     break;
                 case "Police":
                     UsersButton.IsEnabled = false;
@@ -73,6 +75,7 @@ namespace ProjectPRN_SE1886
                     RegistrationsButton.IsEnabled = false;
                     RegistrationsManageButton.IsEnabled = false;
                     ProfileButton.Visibility = Visibility.Hidden;
+                    MemberManageButton.IsEnabled = false;
                     // All buttons enabled
                     break;
             }
@@ -137,6 +140,12 @@ namespace ProjectPRN_SE1886
         private void NotificationViewButton_Click(object sender, RoutedEventArgs e)
         {
             NotificationView window = new NotificationView(_currentUser);
+            window.Show();
+        }
+
+        private void MembersManageButton_Click(object sender, RoutedEventArgs e)
+        {
+            MemberWindow window = new MemberWindow();
             window.Show();
         }
     }

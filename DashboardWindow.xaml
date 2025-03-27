@@ -22,15 +22,17 @@
                         Margin="0,0,0,10" Click="RegistrationsButton_Click"/>
                 <Button x:Name="RegistrationsManageButton" Content="Manage Registrations" 
                         Margin="0,0,0,10" Click="RegistrationsManageButton_Click"/>
+                <Button x:Name="MemberManageButton" Content="Manage Members" 
+        Margin="0,0,0,10" Click="MembersManageButton_Click"/>
                 <Button x:Name="NotificationsButton" Content="Manage Notifications" 
                         Margin="0,0,0,10" Click="NotificationsButton_Click"/>
                 <Button x:Name="NotificationViewButton" Content="NotificationView" Margin="0,0,0,10" Click="NotificationViewButton_Click"/>
                 <Button x:Name="LogsButton" Content="Manage Logs" 
                         Margin="0,0,0,10" Click="LogsButton_Click"/>
-                
+
                 <Button x:Name="ProfileButton" Content="Profile" Margin="0,0,0,10" Click="ProfileButton_Click"/>
-                
-               
+
+
                 <Button x:Name="LogoutButton" Content="Logout" 
                         Margin="0,0,0,10" Click="LogoutButton_Click"/>
             </StackPanel>
