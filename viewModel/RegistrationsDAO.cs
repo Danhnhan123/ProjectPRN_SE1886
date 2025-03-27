@@ -18,7 +18,7 @@ namespace ProjectPRN_SE1886
         public List<Household> GetHouseholds()
         {
             return _context.Households
-                .Include(h => h.HeadOfHousehold) 
+                .Include(h => h.HeadOfHousehold)
                 .ToList();
         }
 
@@ -32,7 +32,7 @@ namespace ProjectPRN_SE1886
         {
             return _context.Registrations
                 .Where(r => r.UserId == userId)
-                .Include(r => r.Household) 
+                .Include(r => r.Household)
                 .ToList();
         }
 
@@ -67,6 +67,7 @@ namespace ProjectPRN_SE1886
                 .Where(r => r.Status == "Pending")
                 .Include(r => r.User)
                 .Include(r => r.Household)
+                .ThenInclude(h => h.HeadOfHousehold) 
                 .ToList();
         }
 
@@ -124,6 +125,19 @@ namespace ProjectPRN_SE1886
                 throw new Exception("Error updating household member: " + ex.Message);
             }
         }
-    }
 
+        public void RemoveHouseholdMember(HouseholdMember member)
+        {
+            try
+            {
+                _context.HouseholdMembers.Remove(member);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error removing household member: " + ex.Message);
+            }
+        }
+
+    }
 }

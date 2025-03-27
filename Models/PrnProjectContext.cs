@@ -45,9 +45,7 @@ public partial class PrnProjectContext : DbContext
     {
         modelBuilder.Entity<Household>(entity =>
         {
-            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6EC040DE786");
-
-            entity.HasIndex(e => e.HouseholdNumber, "UQ_HouseholdNumber").IsUnique();
+            entity.HasKey(e => e.HouseholdId).HasName("PK__Househol__1453D6ECC5CD093B");
 
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
             entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
@@ -58,12 +56,12 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.HeadOfHousehold).WithMany(p => p.Households)
                 .HasForeignKey(d => d.HeadOfHouseholdId)
-                .HasConstraintName("FK__Household__HeadO__48CFD27E");
+                .HasConstraintName("FK__Household__HeadO__5EBF139D");
         });
 
         modelBuilder.Entity<HouseholdMember>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B3841638C20");
+            entity.HasKey(e => e.MemberId).HasName("PK__Househol__0CF04B38ADDD7D85");
 
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
@@ -72,16 +70,16 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.Household).WithMany(p => p.HouseholdMembers)
                 .HasForeignKey(d => d.HouseholdId)
-                .HasConstraintName("FK__Household__House__46E78A0C");
+                .HasConstraintName("FK__Household__House__5CD6CB2B");
 
             entity.HasOne(d => d.User).WithMany(p => p.HouseholdMembers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Household__UserI__47DBAE45");
+                .HasConstraintName("FK__Household__UserI__5DCAEF64");
         });
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A815B9F375");
+            entity.HasKey(e => e.LogId).HasName("PK__Logs__5E5499A819E6DC18");
 
             entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.Action).HasMaxLength(100);
@@ -92,12 +90,12 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Logs)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Logs__UserID__49C3F6B7");
+                .HasConstraintName("FK__Logs__UserID__5FB337D6");
         });
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E324634580A");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E3265A664E5");
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.IsRead).HasDefaultValue(false);
@@ -108,12 +106,12 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Notificat__UserI__4AB81AF0");
+                .HasConstraintName("FK__Notificat__UserI__60A75C0F");
         });
 
         modelBuilder.Entity<Registration>(entity =>
         {
-            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF5883026765377");
+            entity.HasKey(e => e.RegistrationId).HasName("PK__Registra__6EF588303DFB667B");
 
             entity.Property(e => e.RegistrationId).HasColumnName("RegistrationID");
             entity.Property(e => e.HouseholdId).HasColumnName("HouseholdID");
@@ -125,24 +123,22 @@ public partial class PrnProjectContext : DbContext
 
             entity.HasOne(d => d.ApprovedByNavigation).WithMany(p => p.RegistrationApprovedByNavigations)
                 .HasForeignKey(d => d.ApprovedBy)
-                .HasConstraintName("FK__Registrat__Appro__4BAC3F29");
+                .HasConstraintName("FK__Registrat__Appro__619B8048");
 
             entity.HasOne(d => d.Household).WithMany(p => p.Registrations)
                 .HasForeignKey(d => d.HouseholdId)
-                .HasConstraintName("FK__Registrat__House__4CA06362");
+                .HasConstraintName("FK__Registrat__House__628FA481");
 
             entity.HasOne(d => d.User).WithMany(p => p.RegistrationUsers)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Registrat__UserI__4D94879B");
+                .HasConstraintName("FK__Registrat__UserI__6383C8BA");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC81459932");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACF4B1391B");
 
-            entity.HasIndex(e => e.Cccd, "UQ_CCCD").IsUnique();
-
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053485A2C165").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534318E1BFD").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.Cccd)
@@ -160,4 +156,3 @@ public partial class PrnProjectContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
-

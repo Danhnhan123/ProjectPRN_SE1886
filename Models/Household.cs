@@ -20,4 +20,6 @@ public partial class Household
     public virtual ICollection<HouseholdMember> HouseholdMembers { get; set; } = new List<HouseholdMember>();
 
     public virtual ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    public string AddressDisplay => $"{Address} - Chủ hộ: {HeadOfHousehold?.FullName} ({HeadOfHousehold?.Cccd}) - Số hộ: {HouseholdNumber}";
+
 }

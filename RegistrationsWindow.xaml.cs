@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ProjectPRN_SE1886.Models;
-using ProjectPRN_SE1886.viewModel;
 
 namespace ProjectPRN_SE1886
 {
@@ -32,34 +31,26 @@ namespace ProjectPRN_SE1886
 
         private void SetupUI()
         {
-            // Hiển thị thông tin người dùng hiện tại
-            CurrentUserTextBlock.Text = $"{_currentUser.FullName} ({_currentUser.Email})";
+            CurrentUserTextBlock.Text = $"{_currentUser.FullName} ({_currentUser.Cccd})";
 
-            // Thiết lập ComboBox cho địa chỉ hộ gia đình
             HouseholdAddressComboBox.IsEditable = true;
             HouseholdAddressComboBox.IsTextSearchEnabled = false;
-            var availableHouseholds = _allHouseholds.Where(h => !IsUserInHousehold(h.HouseholdId)).ToList();
+            var availableHouseholds = _allHouseholds.ToList(); 
             HouseholdAddressComboBox.ItemsSource = availableHouseholds;
             HouseholdAddressComboBox.SelectedValuePath = "HouseholdId";
-            HouseholdAddressComboBox.DisplayMemberPath = "Address";
+            HouseholdAddressComboBox.DisplayMemberPath = "AddressDisplay"; 
 
-            // Thiết lập RegistrationType ComboBox
-            RegistrationTypeComboBox.ItemsSource = new List<string> { "Permanent", "Temporary", "TemporaryStay" };
+
+            RegistrationTypeComboBox.ItemsSource = new List<string> { "Permanent", "Temporary", "TemporaryStay", "MoveOut" };
             RegistrationTypeComboBox.SelectedIndex = 0;
+            RegistrationTypeComboBox.SelectionChanged += RegistrationTypeComboBox_SelectionChanged;
 
-            // Thiết lập DatePicker
             StartDatePicker.SelectedDate = DateTime.Today.AddDays(1);
             StartDatePicker.BlackoutDates.AddDatesInPast();
 
-            
-
-            // Thiết lập ràng buộc cho EndDate
-            EndDatePicker.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, StartDatePicker.SelectedDate.Value.AddDays(9)));
-
-            // Thiết lập DataGrid lịch sử đăng ký
             RegistrationHistoryDataGrid.ItemsSource = _userRegistrations.Select(r => new
             {
-                HouseholdAddress = _allHouseholds.FirstOrDefault(h => h.HouseholdId == r.HouseholdId)?.Address ?? "N/A",
+                HouseholdAddress = _allHouseholds.FirstOrDefault(h => h.HouseholdId == r.HouseholdId)?.AddressDisplay ?? "N/A",
                 r.RegistrationType,
                 r.StartDate,
                 r.EndDate,
@@ -68,18 +59,50 @@ namespace ProjectPRN_SE1886
             });
         }
 
-        // Kiểm tra xem user có trong hộ gia đình không
-        private bool IsUserInHousehold(int householdId)
+        private void RegistrationTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var selectedType = RegistrationTypeComboBox.SelectedItem?.ToString();
+            var selectedHousehold = HouseholdAddressComboBox.SelectedItem as Household;
             var member = _registrationsDAO.GetHouseholdMemberByUserId(_currentUser.UserId);
-            return member != null && member.HouseholdId == householdId;
+
+            if (StartDatePicker.SelectedDate.HasValue)
+            {
+                EndDatePicker.BlackoutDates.Clear();
+                EndDatePicker.BlackoutDates.AddDatesInPast();
+                switch (selectedType)
+                {
+                    case "MoveOut":
+                        EndDatePicker.IsEnabled = false;
+                        EndDatePicker.BlackoutDates.Clear();
+                        EndDatePicker.SelectedDate = null;
+                        break;
+                    case "Permanent":
+                        EndDatePicker.IsEnabled = false;
+                        EndDatePicker.BlackoutDates.Clear();
+                        EndDatePicker.SelectedDate = null;
+                        break;
+                    case "Temporary":
+                        EndDatePicker.IsEnabled = true;
+                        EndDatePicker.BlackoutDates.Clear();
+                        EndDatePicker.SelectedDate = null; 
+                        EndDatePicker.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, StartDatePicker.SelectedDate.Value.AddDays(29)));
+                        break;
+                    case "TemporaryStay":
+                        EndDatePicker.IsEnabled = true;
+                        EndDatePicker.BlackoutDates.Clear();
+                        EndDatePicker.SelectedDate = null; 
+                        EndDatePicker.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, StartDatePicker.SelectedDate.Value));
+                        EndDatePicker.BlackoutDates.Add(new CalendarDateRange(StartDatePicker.SelectedDate.Value.AddDays(30), DateTime.MaxValue));
+                        break;
+                }
+            }
         }
 
-        // Xử lý sự kiện khi text trong ComboBox thay đổi
         private void HouseholdAddressComboBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string filter = HouseholdAddressComboBox.Text.ToLower();
-            var availableHouseholds = _allHouseholds.Where(h => !IsUserInHousehold(h.HouseholdId)).ToList();
+            var availableHouseholds = _allHouseholds.ToList();
+
             if (string.IsNullOrEmpty(filter))
             {
                 HouseholdAddressComboBox.ItemsSource = availableHouseholds;
@@ -87,7 +110,7 @@ namespace ProjectPRN_SE1886
             else
             {
                 HouseholdAddressComboBox.ItemsSource = availableHouseholds
-                    .Where(h => h.Address.ToLower().Contains(filter))
+                    .Where(h => h.AddressDisplay.ToLower().Contains(filter))
                     .ToList();
             }
             HouseholdAddressComboBox.IsDropDownOpen = true;
@@ -95,11 +118,7 @@ namespace ProjectPRN_SE1886
 
         private void StartDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StartDatePicker.SelectedDate.HasValue)
-            {
-                EndDatePicker.BlackoutDates.Clear();
-                EndDatePicker.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, StartDatePicker.SelectedDate.Value.AddDays(9)));
-            }
+
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -120,29 +139,39 @@ namespace ProjectPRN_SE1886
 
                 _registrationsDAO.AddRegistration(registration);
                 MessageBox.Show("Registration submitted successfully!");
-                LoadData(); // Cập nhật lại dữ liệu
-                SetupUI(); // Cập nhật lại giao diện
+                LoadData();
+                SetupUI();
             }
         }
 
         private bool ValidateInput()
         {
-            if (!StartDatePicker.SelectedDate.HasValue)
-            {
-                MessageBox.Show("Please select a Start Date.");
-                return false;
-            }
-            if (!EndDatePicker.SelectedDate.HasValue && RegistrationTypeComboBox.SelectedItem.ToString() != "Permanent")
-            {
-                MessageBox.Show("Please select an End Date.");
-                return false;
-            }
             if (HouseholdAddressComboBox.SelectedItem == null)
             {
                 MessageBox.Show("Please select a Household Address.");
                 return false;
             }
+
             return true;
+        }
+
+        private void HouseholdAddressComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedHousehold = HouseholdAddressComboBox.SelectedItem as Household;
+            var member = _registrationsDAO.GetHouseholdMemberByUserId(_currentUser.UserId);
+
+            if (selectedHousehold != null && member != null && member.HouseholdId == selectedHousehold.HouseholdId)
+            {
+                RegistrationTypeComboBox.ItemsSource = new List<string> { "MoveOut" };
+                RegistrationTypeComboBox.SelectedIndex = 0;
+                RegistrationTypeComboBox.IsEnabled = false;
+            }
+            else
+            {
+                RegistrationTypeComboBox.ItemsSource = new List<string> { "Permanent", "Temporary", "TemporaryStay" };
+                RegistrationTypeComboBox.IsEnabled = true;
+                RegistrationTypeComboBox.SelectedIndex = 0;
+            }
         }
     }
 }

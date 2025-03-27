@@ -23,7 +23,7 @@
 
         <Label Content="Household Address:" Grid.Row="1" Margin="0,0,0,5"/>
         <ComboBox x:Name="HouseholdAddressComboBox" Grid.Row="1" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"
-                  IsEditable="True" TextBoxBase.TextChanged="HouseholdAddressComboBox_TextChanged"/>
+                  IsEditable="True" TextBoxBase.TextChanged="HouseholdAddressComboBox_TextChanged" SelectionChanged="HouseholdAddressComboBox_SelectionChanged"/>
 
         <Label Content="Registration Type:" Grid.Row="2" Margin="0,0,0,5"/>
         <ComboBox x:Name="RegistrationTypeComboBox" Grid.Row="2" Margin="120,0,0,5" Width="650" HorizontalAlignment="Left"/>
